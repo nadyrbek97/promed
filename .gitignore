@@ -1,0 +1,10 @@
+/.idea
+/venv
+/db.sqlite3
+/.env
+/locale/ru/LC_MESSAGES/django.mo
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
