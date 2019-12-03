@@ -11,6 +11,7 @@ class Service(models.Model):
                                    related_name="services")
 
     class Meta:
+        ordering = ["title"]
         verbose_name = "Service"
         verbose_name_plural = "Services"
 
