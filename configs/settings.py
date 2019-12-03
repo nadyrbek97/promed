@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'med_center',
     'departament',
     'branch',
+    'services',
+    'visit',
 
 ]
 
