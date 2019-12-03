@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # apps
     'profiles',
     'med_center',
+    'departament',
+    'branch',
 
 ]
 
