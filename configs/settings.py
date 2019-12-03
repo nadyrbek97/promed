@@ -38,6 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # packages
+
+
+    # apps
+    'profiles',
+
 ]
 
 MIDDLEWARE = [
@@ -120,3 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# set Custom User Model
+AUTH_USER_MODEL = 'profiles.User'
