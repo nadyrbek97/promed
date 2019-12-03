@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     # apps
     'profiles',
+    'med_center',
 
 ]
 
@@ -126,6 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# where it is going to upload
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# url in browser example.com/media/image_1.img
+MEDIA_URL = '/media/'
 
 # set Custom User Model
 AUTH_USER_MODEL = 'profiles.User'
