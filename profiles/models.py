@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 from profiles.choices import ROLE, GENDER
 
+from departament.models import Departament
+
 
 class User(AbstractUser):
     username = models.CharField(max_length=200, unique=True)
@@ -21,9 +23,17 @@ class User(AbstractUser):
 
 
 class Doctor(models.Model):
-    profile_id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    profile_id = models.OneToOneField(User,
+                                      on_delete=models.CASCADE,
+                                      primary_key=True)
+    department_id = models.ForeignKey(Departament,
+                                      on_delete=models.CASCADE,
+                                      related_name="doctors")
     experience = models.IntegerField(default=1)
-    salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    salary = models.DecimalField(max_digits=10, decimal_places=2,
+                                 null=True, blank=True)
+    image = models.ImageField(upload_to="doctors/",
+                              null=True, blank=True)
 
     class Meta:
         verbose_name = "Doctor"
