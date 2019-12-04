@@ -6,7 +6,7 @@ from med_center.models import MedicalCenter
 class Departament(models.Model):
     title = models.CharField(max_length=500)
     description = models.TextField()
-    image = models.ImageField(upload_to='departament/')
+    image = models.ImageField(upload_to='departament/', help_text="only little icons")
     med_center = models.ForeignKey(MedicalCenter, on_delete=models.CASCADE,
                                    related_name="departaments")
 
