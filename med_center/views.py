@@ -8,12 +8,14 @@ from profiles.models import Doctor
 def main_page_view(request):
 
     med_center = MedicalCenter.objects.get(id=1)
+    logo = med_center.photos.filter(is_logo=True).first()
     main_branch = Branch.objects.get(med_center_id=med_center.id)
     main_branch_number = main_branch.numbers.first()
     doctors = Doctor.objects.all()
 
     context = {
         "med_center": med_center,
+        "logo": logo,
         "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
         "doctors": doctors

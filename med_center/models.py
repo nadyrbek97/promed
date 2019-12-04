@@ -16,6 +16,7 @@ class MedicalCenter(models.Model):
 class MedCenterPhoto(models.Model):
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to="med-center-photos/")
+    is_logo = models.BooleanField(default=False)
     medical_center = models.ForeignKey(MedicalCenter, on_delete=models.CASCADE,
                                        related_name="photos")
 
