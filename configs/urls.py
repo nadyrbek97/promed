@@ -19,7 +19,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+from med_center.views import main_page_view
+
+
 urlpatterns = [
+    path('', main_page_view, name='main-page'),
     path('admin/', admin.site.urls),
 ]
 
