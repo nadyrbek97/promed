@@ -222,7 +222,7 @@
         <div class="row no-gutters">
             {% for doctor in doctors %}
               <div class="col-lg-3 col-md-3 col-sm-6 col-6 prbootstrap-team">
-                <img src="images/person_4.jpg" alt="Free Template by uicookies.com" class="img-fluid">
+                <img src="{{ doctor.image.url }}" alt="Free Template by uicookies.com" class="img-fluid">
                 <div class="probootstrap-person-text">
                   <span class="title">{{ doctor.department.title }}</span>
                   <span class="name">{{ doctor.profile_id.first_name }} {{ doctor.profile_id.last_name }}</span>
