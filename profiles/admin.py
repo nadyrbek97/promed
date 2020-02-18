@@ -1,17 +1,14 @@
-from django.contrib import admin
-from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin
-
 from .models import (User,
                      Doctor,
                      Patient,
                      UserPhoneNumber)
-
+from profiles.choices import ROLE
 
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 
@@ -23,8 +20,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'role', 'gender', 'first_name', 'last_name',
-                  'patronymic', 'birth_date', 'email', 'password', ]
+        fields = ['username', 'role', 'password1', "password2"]
 
     def clean_password2(self):
         # Check that the two password entries match
