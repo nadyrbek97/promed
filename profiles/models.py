@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save, post_delete
+
 
 from profiles.choices import ROLE, GENDER
 
@@ -27,6 +29,7 @@ class Doctor(models.Model):
                                       on_delete=models.CASCADE,
                                       primary_key=True)
     department_id = models.ForeignKey(Departament,
+                                      null=True, blank=True,
                                       on_delete=models.CASCADE,
                                       related_name="doctors")
     experience = models.IntegerField(default=1)
@@ -42,6 +45,10 @@ class Doctor(models.Model):
     def __str__(self):
         return f"{self.profile_id.first_name} {self.profile_id.last_name}"
 
+    def save(self, *args, **kwargs):
+
+        super.save()
+
 
 class UserPhoneNumber(models.Model):
     number = models.CharField(max_length=40)
@@ -50,7 +57,7 @@ class UserPhoneNumber(models.Model):
 
 class Patient(models.Model):
     profile_id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    address = models.CharField(max_length=255)
+    address = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
         verbose_name = "Patient"
@@ -59,3 +66,15 @@ class Patient(models.Model):
     def __str__(self):
         return f"{self.profile_id.first_name} {self.profile_id.last_name}"
 
+
+# function to create doctor or patient after creating User
+def create_doctor_or_patient(sender, **kwargs):
+    user = kwargs["instance"]
+    if kwargs["created"]:
+        if user.role == 0:
+            Doctor.objects.create(profile_id=user)
+        elif user.role == 1:
+            Patient.objects.create(profile_id=user)
+
+
+post_save.connect(create_doctor_or_patient, sender=User)
