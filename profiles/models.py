@@ -45,10 +45,6 @@ class Doctor(models.Model):
     def __str__(self):
         return f"{self.profile_id.first_name} {self.profile_id.last_name}"
 
-    def save(self, *args, **kwargs):
-
-        super.save()
-
 
 class UserPhoneNumber(models.Model):
     number = models.CharField(max_length=40)
