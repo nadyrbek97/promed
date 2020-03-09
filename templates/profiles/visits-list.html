@@ -13,45 +13,37 @@
             <!-- ============================================================== -->
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card">
-                    <h5 class="card-header">Доктор <span class="text-uppercase font-bold text-dark"">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</span> это список ваших пациентов</h5>
+                    <h5 class="card-header">Доктор <span class="text-uppercase font-bold text-dark">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</span> это ваши заключения</h5>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                               <thead>
                                 <tr>
-                                  <th class="th-sm">Имя
+                                  <th class="th-sm">Имя Пацинента
 
                                   </th>
-                                  <th class="th-sm">Фамилия
+                                  <th class="th-sm">Фамилия Пацинента
 
                                   </th>
-                                  <th class="th-sm">Отчество
+                                  <th class="th-sm">Отчество Пацинента
 
                                   </th>
                                   <th class="th-sm">Дата Рождения
 
                                   </th>
-                                  <th class="th-sm">Дата Последнего Посещения
-
-                                  </th>
-                                  <th class="th-sm">Пол
+                                  <th class="th-sm">Дата Заключения
 
                                   </th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {% for patient in patients %}
+                                {% for visit in visits %}
                                     <tr>
-                                      <td>{{ patient.profile_id.first_name }}</td>
-                                      <td>{{ patient.profile_id.last_name }}</td>
-                                      <td>{{ patient.profile_id.patronymic }}</td>
-                                      <td>{{ patient.profile_id.birth_date }}</td>
-                                      <td>{{ patient.visits.last.start_time }}</td>
-                                        {% if patient.profile_id.patient == 0 %}
-                                            <td>муж.</td>
-                                        {% else %}
-                                            <td>жен.</td>
-                                        {% endif %}
+                                      <td>{{ visit.patient.profile_id.first_name }}</td>
+                                      <td>{{ visit.patient.profile_id.last_name }}</td>
+                                      <td>{{ visit.patient.profile_id.patronymic }}</td>
+                                      <td>{{ visit.patient.profile_id.birth_date }}</td>
+                                      <td>{{ visit.created }}</td>
                                     </tr>
                                 {% endfor %}
                             </table>

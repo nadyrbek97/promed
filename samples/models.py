@@ -1,5 +1,5 @@
-
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from departament.models import Departament
 
@@ -15,8 +15,8 @@ class Sample(models.Model):
 
     class Meta:
         ordering = ["title"]
-        verbose_name = "Sample"
-        verbose_name_plural = "Sample"
+        verbose_name = _("Sample")
+        verbose_name_plural = _("Sample")
 
     def __str__(self):
         return f"{self.title} {self.price}"

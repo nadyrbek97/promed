@@ -1,4 +1,5 @@
 import os
+
 from django.conf import settings
 from io import BytesIO
 from django.http import HttpResponse
@@ -12,7 +13,8 @@ def render_to_pdf(template_src, context_dict={}):
 
     html = template.render(context_dict)
     result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode("utf-8")), result, encoding='UTF-8', link_callback=link_callback)
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")),
+                            result, encoding='utf-8', link_callback=link_callback)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return HttpResponse('We had some errors <pre>' + html + '</pre>')
@@ -25,15 +27,15 @@ def link_callback(uri, rel):
     """
     # use short variable names
     sUrl = settings.STATIC_URL      # Typically /static/
-    sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
+    sRoot = settings.STATIC_ROOT_CUSTOM    # Typically /home/userX/project_static/
     mUrl = settings.MEDIA_URL       # Typically /static/media/
     mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
 
     # convert URIs to absolute system paths
     if uri.startswith(mUrl):
         path = os.path.join(mRoot, uri.replace(mUrl, ""))
-    # elif uri.startswith(sUrl):
-    #     path = os.path.join(sRoot, uri.replace(sUrl, ""))
+    elif uri.startswith(sUrl):
+        path = os.path.join(sRoot, uri.replace(sUrl, ""))
     else:
         return uri  # handle absolute uri (ie: http://some.tld/foo.png)
 
@@ -46,5 +48,10 @@ def link_callback(uri, rel):
 
 
 def fetch_resources(uri, rel):
-    path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+    if uri.find(settings.MEDIA_URL) != -1:
+        path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ''))
+    elif uri.find(settings.STATIC_URL) != -1:
+        path = os.path.join(settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, ''))
+    else:
+        path = None
     return path

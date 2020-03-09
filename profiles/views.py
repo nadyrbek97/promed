@@ -11,41 +11,19 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 from med_center.models import MedicalCenter
-from profiles.models import User
+from profiles.models import User, Patient, Doctor
+from visit.models import Visit
 from profiles.forms import UserLoginForm, ConclusionForm
 
 from samples.models import Sample
 
 from .utils import render_to_pdf
 
-
-class CreatePDF(View):
-
-    def get(self, request, *args, **kwargs):
-        data = {
-            'today': datetime.date.today(),
-            'amount': 39.99,
-            'customer_name': 'Cooper Mann',
-            'order_id': 1233434,
-        }
-        pdf = render_to_pdf('pdf/conclusion.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
-
-
-# def generate_pdf(self, request, *args, **kwargs):
-#     data = {
-#         'today': datetime.date.today(),
-#         'amount': 39.99,
-#         'customer_name': 'Cooper Mann',
-#         'order_id': 1233434,
-#     }
-#     pdf = render_to_pdf('pdf/invoice.html', data)
-#     # return HttpResponse(pdf, content_type='application/pdf')
-#     return HttpResponse(pdf)
+# Medical Center
+med_center = MedicalCenter.objects.get(id=1)
 
 
 def login(request):
-    med_center = MedicalCenter.objects.get(id=1)
 
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
@@ -75,8 +53,6 @@ def logout(request):
 
 @login_required(login_url="/profiles/login/")
 def profile_main_view(request):
-    # med center
-    med_center = MedicalCenter.objects.get(id=1)
     user = request.user
 
     form = ConclusionForm(request.POST)
@@ -85,32 +61,52 @@ def profile_main_view(request):
         form = ConclusionForm(data=request.POST)
         if form.is_valid():
             print("is valid")
+            # get doctor from request.user
             user = request.user
+            # get image from request
             image = request.FILES['image']
+            print(image.name)
+            print(image.size)
             fs = FileSystemStorage()
-            name = fs.save(image.name, image)
-            url = fs.url(name)
+            image_name = fs.save(image.name, image)
+            url = fs.url(image_name)
             print(url)
+            # ---save image finished----
 
             doctor_name_surname = user.first_name + " " + user.last_name
+            # get data from form
             patient_name_surname = form.cleaned_data["user_name_surname"]
-            amount = 1000
             email = form.cleaned_data["email"]
             text = form.cleaned_data["text"]
-            # image = form.cleaned_data["image"]
-            # image = form.cleaned_data["image"]
+
+            # # ----------CREATE PATIENT --------
+            # amount_of_users = User.objects.all().count() + 1
+            # patient_username = 'patient_' + str(amount_of_users)
+            # default_password = 'patient123'
+            # created_user = User.objects.create_user(
+            #     username=patient_username,
+            #     password=default_password,
+            #     first_name=patient_name_surname,
+            #     last_name=patient_name_surname,
+            #     role=1
+            # )
+            # Patient.objects.create(profile_id=created_user)
+            # print(patient_username)
+            # print(amount_of_users)
+            # ---------------------------------
+            # ---------pass data for pfd ------
+
             data = {
                 'med_center': med_center.title,
                 'doctor_name': doctor_name_surname,
                 'patient_name': patient_name_surname,
-                'amount': amount,
                 'text': text,
                 'image': url,
                 'today': datetime.date.today(),
             }
             pdf = render_to_pdf('pdf/conclusion.html', data)
             return HttpResponse(pdf, content_type='application/pdf')
-
+        print(form.errors)
     # samples
     if user.doctor:
         department_id = user.doctor.department_id
@@ -127,12 +123,51 @@ def profile_main_view(request):
     return render(request, "profiles/profile-main-page.html", context=context)
 
 
+@login_required(login_url="/profiles/login/")
 def patient_list(request):
-    # Patients
-    patients = User.objects.filter(role=1)
+    # Get doctor first
+    doctor = request.user.doctor
 
+    # Patients
+    visits = Visit.objects.filter(doctor=doctor)
+    patients_list = []
+    for visit in visits:
+        patient = Patient.objects.get(visits=visit.id)
+        patients_list.append(patient)
+    patients = set(patients_list)
     context = {
         "patients": patients,
+        "med_center": med_center
     }
 
     return render(request, "profiles/patient-list.html", context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def visit_list(request):
+    # Get doctor first
+    doctor_user_id = request.user.doctor
+    doctor = Doctor.objects.get(profile_id=doctor_user_id)
+    # Patients
+    visits = Visit.objects.filter(doctor=doctor)
+    context = {
+        "visits": visits,
+        "med_center": med_center
+    }
+
+    return render(request, "profiles/visits-list.html", context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def sample_list(request):
+    # Get doctor first
+    doctor_user_id = request.user.doctor
+    doctor = Doctor.objects.get(profile_id=doctor_user_id)
+    # Patients
+    samples = Sample.objects.filter(department__doctors__exact=doctor)
+    context = {
+        "samples": samples,
+        "med_center": med_center
+    }
+
+    return render(request, "profiles/samples-list.html", context=context)

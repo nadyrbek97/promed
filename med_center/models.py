@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class MedicalCenter(models.Model):
@@ -6,8 +7,8 @@ class MedicalCenter(models.Model):
     description = models.TextField()
 
     class Meta:
-        verbose_name = "Medical Center"
-        verbose_name_plural = "Medical Centers"
+        verbose_name = _("Medical Center")
+        verbose_name_plural = _("Medical Centers")
 
     def __str__(self):
         return f"{self.title}"
@@ -21,8 +22,8 @@ class MedCenterPhoto(models.Model):
                                        related_name="photos")
 
     class Meta:
-        verbose_name = "Med-Center Photo"
-        verbose_name_plural = "Med-Center Photos"
+        verbose_name = _("Med-Center Photo")
+        verbose_name_plural = _("Med-Center Photos")
 
     def __str__(self):
         return f"{self.title}"

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from profiles.models import (Doctor,
                              Patient)
@@ -19,8 +20,8 @@ class Visit(models.Model):
 
     class Meta:
         ordering = ['created']
-        verbose_name = "Visit"
-        verbose_name_plural = "Visits"
+        verbose_name = _("Visit")
+        verbose_name_plural = _("Visits")
 
     def __str__(self):
         return f"visit at {self.start_time} for doctor {self.doctor.profile_id.first_name}"

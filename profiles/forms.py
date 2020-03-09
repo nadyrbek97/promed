@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
 
@@ -18,33 +19,26 @@ class UserLoginForm(AuthenticationForm):
 
 class ConclusionForm(forms.Form):
     user_name_surname = forms.CharField(
-        required=False,
         label="Ф.И.О пациента",
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Ф.И.О',
-                'class': "form-control",
-            }))
+                'class': "form-control", }))
     email = forms.EmailField(
         required=False,
         label="Email",
         widget=forms.EmailInput(
             attrs={
                 'placeholder': 'name@example.com',
-                'class': 'form-control'
-            }
-        )
-    )
+                'class': 'form-control'}))
     text = forms.CharField(
-        required=False,
         label="Текст заключения",
         widget=forms.Textarea(
             attrs={
                 'width': "100%", 'cols': "100", 'rows': "20",
                 'placeholder': 'Текст заключения',
                 'class': 'form-control',
-                'id': 'conclusion-text'
-            }))
+                'id': 'conclusion-text'}))
     image = forms.FileField(
         required=False,
         label="Выберите снимок",
@@ -52,10 +46,24 @@ class ConclusionForm(forms.Form):
             attrs={
                 'name': 'conclusion_image',
                 'placeholder': 'Выберите снимок',
-                'class': 'custom-file-input',
-            }
-        )
-    )
+                'class': 'custom-file-input', }))
 
+    def clean_user_name_surname(self):
+        user_name_surname = self.cleaned_data['user_name_surname']
+        if len(user_name_surname) < 5:
+            raise ValidationError("слишком коротко")
+        return user_name_surname
 
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        if len(text) < 10:
+            raise ValidationError("слишком коротко")
+
+        return text
+
+    # def clean_image(self):
+    #     image = self.cleaned_data['image']
+    #     if not image:
+    #         raise ValidationError("вставте снимок")
+    #     return image
 

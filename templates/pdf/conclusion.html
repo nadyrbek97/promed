@@ -2,15 +2,16 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>{{ med_center }} {{ today }}</title>
         <style type="text/css">
             @font-face {
-                font-family: Whipsmart; src: url(/static/fonts/pdf.ttf);
+                font-family: 'OpenSansRegular';
+                src: url("/static/OpenSans-Regular.ttf");
                 color: #333333;
             }
             body {
-                font-family: Whipsmart, Arial, 'sans-serif';
+                font-family: 'OpenSansRegular', sans-serif;
                 font-weight: 200;
                 font-size: 14px;
             }
@@ -44,20 +45,27 @@
                 color: #333; /* old IE */
                 background-color: #fff; /* Modern Browsers */
             }
+            .hrItem2 {
+                border: none;
+                height: 1px;
+                text-align: right;
+                float: right;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
         </style>
     </head>
     <body>
         <div class='wrapper'>
             <div class='header'>
-                <p class='title'>"{{ med_center }}" medical center</p>
+                <p class='title'>Медицинский центр "{{ med_center }}"</p>
             </div>
         </div>
         <div>
             <div class='details'>
-                Doctor: {{ doctor_name }}<br/>
-                Patient: {{ patient_name }}<br/>
-                Price:  {{ amount }}<br/>
-
+                Доктор: {{ doctor_name }}<br/>
+                Пациент: {{ patient_name }}<br/>
                 <hr class='hrItem' />
             </div>
             
@@ -67,8 +75,9 @@
                 <hr class='hrItem' />
                 <div class="details-left">
 
-                    Date: {{ today }}
+                    Дата: {{ today }}
                 </div>
+                <hr class="hrItem2" width="15%"/>
             </div>
         </div>
     </body>

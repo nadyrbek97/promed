@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from med_center.models import MedicalCenter
 
@@ -12,8 +13,8 @@ class Branch(models.Model):
                                       related_name="branches")
 
     class Meta:
-        verbose_name = "Branch"
-        verbose_name_plural = "Branches"
+        verbose_name = _("Branch")
+        verbose_name_plural = _("Branches")
 
     def __str__(self):
         return f"{self.title} {self.address}"
@@ -25,8 +26,8 @@ class BranchPhoneNumber(models.Model):
                                   related_name="numbers")
 
     class Meta:
-        verbose_name = "Number"
-        verbose_name_plural = "Numbers"
+        verbose_name = _("Branch Number")
+        verbose_name_plural = _("Branch Numbers")
 
     def __str__(self):
         return f"{self.number} => {self.branch_id.title}"

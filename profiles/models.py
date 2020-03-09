@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
+from django.utils.translation import gettext_lazy as _
 
 
 from profiles.choices import ROLE, GENDER
@@ -39,8 +40,8 @@ class Doctor(models.Model):
                               null=True, blank=True)
 
     class Meta:
-        verbose_name = "Doctor"
-        verbose_name_plural = "Doctors"
+        verbose_name = _("Doctor")
+        verbose_name_plural = _("Doctors")
 
     def __str__(self):
         return f"{self.profile_id.first_name} {self.profile_id.last_name}"
@@ -56,8 +57,8 @@ class Patient(models.Model):
     address = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
-        verbose_name = "Patient"
-        verbose_name_plural = "Patients"
+        verbose_name = _("Patient")
+        verbose_name_plural = _("Patients")
 
     def __str__(self):
         return f"{self.profile_id.first_name} {self.profile_id.last_name}"
@@ -74,3 +75,4 @@ def create_doctor_or_patient(sender, **kwargs):
 
 
 post_save.connect(create_doctor_or_patient, sender=User)
+
