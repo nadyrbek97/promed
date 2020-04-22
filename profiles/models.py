@@ -6,30 +6,28 @@ from django.utils.translation import gettext_lazy as _
 
 from profiles.choices import ROLE, GENDER
 
-from departament.models import Departament
+from department.models import Department
 
 
 class User(AbstractUser):
     username = models.CharField(max_length=200, unique=True)
     role = models.PositiveSmallIntegerField(choices=ROLE, default=0)
     gender = models.PositiveSmallIntegerField(choices=GENDER, default=1)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    patronymic = models.CharField(max_length=100, null=True, blank=True)
+    full_name = models.CharField(max_length=150)
     birth_date = models.DateField(null=True, blank=True)
     email = models.EmailField("Email", max_length=100, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.role}: {self.first_name} {self.last_name}"
+        return f"{self.role}: {self.full_name}"
 
 
 class Doctor(models.Model):
     profile_id = models.OneToOneField(User,
                                       on_delete=models.CASCADE,
                                       primary_key=True)
-    department_id = models.ForeignKey(Departament,
+    department_id = models.ForeignKey(Department,
                                       null=True, blank=True,
                                       on_delete=models.CASCADE,
                                       related_name="doctors")
@@ -44,7 +42,7 @@ class Doctor(models.Model):
         verbose_name_plural = _("Doctors")
 
     def __str__(self):
-        return f"{self.profile_id.first_name} {self.profile_id.last_name}"
+        return f"{self.profile_id.full_name}"
 
 
 class UserPhoneNumber(models.Model):
@@ -61,7 +59,7 @@ class Patient(models.Model):
         verbose_name_plural = _("Patients")
 
     def __str__(self):
-        return f"{self.profile_id.first_name} {self.profile_id.last_name}"
+        return f"{self.profile_id.full_name}"
 
 
 # function to create doctor or patient after creating User

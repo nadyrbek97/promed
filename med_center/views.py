@@ -3,19 +3,19 @@ from django.shortcuts import render
 from med_center.models import MedicalCenter, MedCenterPhoto
 from branch.models import Branch, BranchPhoneNumber
 from profiles.models import Doctor
-from departament.models import Departament
+from department.models import Department
 from services.models import Service
 
 
 def main_page_view(request):
 
     # med center
-    med_center = MedicalCenter.objects.get(id=1)
+    med_center = MedicalCenter.objects.get(title="Forever Med")
     logo = med_center.photos.filter(is_logo=True).first()
     schedule_times = med_center.schedule_times.all()
 
     # departments
-    departments = Departament.objects.all()
+    departments = Department.objects.all()
 
     # services
     services = Service.objects.filter(department_id=1)

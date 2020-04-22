@@ -24,4 +24,4 @@ class Visit(models.Model):
         verbose_name_plural = _("Visits")
 
     def __str__(self):
-        return f"visit at {self.start_time} for doctor {self.doctor.profile_id.first_name}"
+        return f"visit at {self.start_time} for doctor {self.doctor.profile_id.full_name}"

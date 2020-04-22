@@ -20,7 +20,7 @@ from samples.models import Sample
 from .utils import render_to_pdf
 
 # Medical Center
-med_center = MedicalCenter.objects.get(id=1)
+med_center = MedicalCenter.objects.first()
 
 
 def login(request):
@@ -154,6 +154,7 @@ def visit_list(request):
         "visits": visits,
         "med_center": med_center
     }
+    visit3 = Visit()
 
     return render(request, "profiles/visits-list.html", context=context)
 

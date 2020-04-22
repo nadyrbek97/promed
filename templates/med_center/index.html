@@ -191,7 +191,7 @@
                 {% endif %}
                   <div class="probootstrap-person-text">
                   <span class="title">{{ doctor.department_id.title }}</span>
-                  <span class="name">{{ doctor.profile_id.first_name }} {{ doctor.profile_id.last_name }}</span>
+                  <span class="name">{{ doctor.profile_id.full_name }}</span>
                 </div>
               </div>
             {% endfor %}
