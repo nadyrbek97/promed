@@ -158,17 +158,3 @@ def visit_list(request):
 
     return render(request, "profiles/visits-list.html", context=context)
 
-
-@login_required(login_url="/profiles/login/")
-def sample_list(request):
-    # Get doctor first
-    doctor_user_id = request.user.doctor
-    doctor = Doctor.objects.get(profile_id=doctor_user_id)
-    # Patients
-    samples = Sample.objects.filter(department__doctors__exact=doctor)
-    context = {
-        "samples": samples,
-        "med_center": med_center
-    }
-
-    return render(request, "profiles/samples-list.html", context=context)
