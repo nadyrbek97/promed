@@ -1,14 +1,18 @@
 import datetime
+import json
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.template.loader import get_template
-from django.views.generic import View
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+
 from django.conf import settings
+
+from dal import autocomplete
 
 from med_center.models import MedicalCenter
 from profiles.models import User, Patient, Doctor
@@ -125,6 +129,7 @@ def profile_main_view(request):
 
 @login_required(login_url="/profiles/login/")
 def patient_list(request):
+
     # Get doctor first
     doctor = request.user.doctor
 
@@ -137,10 +142,28 @@ def patient_list(request):
     patients = set(patients_list)
     context = {
         "patients": patients,
-        "med_center": med_center
+        "med_center": med_center,
     }
 
     return render(request, "profiles/patient-list.html", context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def patient_autocomplete_search(request):
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        # query_set = User.objects.filter(Q(role=1) | Q(full_name__startswith=query))[:5]
+        query_set = User.objects.filter(role=1).filter(full_name__icontains=query)[:5]
+        results = []
+        print(query)
+        for qs in query_set:
+            results.append(qs.full_name)
+        data = json.dumps(results)
+        print(results)
+    else:
+        data = "fail"
+    mimetype = "application/json"
+    return HttpResponse(data, mimetype)
 
 
 @login_required(login_url="/profiles/login/")
