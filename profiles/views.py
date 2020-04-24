@@ -7,12 +7,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
-from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
-
-from django.conf import settings
-
-from dal import autocomplete
+from django.core.paginator import Paginator
 
 from med_center.models import MedicalCenter
 from profiles.models import User, Patient, Doctor
@@ -129,7 +124,6 @@ def profile_main_view(request):
 
 @login_required(login_url="/profiles/login/")
 def patient_list(request):
-
     # Get doctor first
     doctor = request.user.doctor
 
@@ -139,9 +133,28 @@ def patient_list(request):
     for visit in visits:
         patient = Patient.objects.get(visits=visit.id)
         patients_list.append(patient)
-    patients = set(patients_list)
+    # patients = set(patients_list)
+    paginator = Paginator(patients_list, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
-        "patients": patients,
+        "page_obj": page_obj,
+        # "patients": patients,
+        "med_center": med_center,
+    }
+
+    return render(request, "profiles/patient-list.html", context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def find_patient_by_full_name(request):
+    full_name = request.GET.get('full-name')
+    patients_list = Patient.objects.filter(profile_id__full_name__icontains=full_name)
+    paginator = Paginator(patients_list, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "page_obj": page_obj,
         "med_center": med_center,
     }
 

@@ -17,14 +17,14 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card-header mb-1">
 {#                        <h5>Доктор <span class="text-uppercase font-bold text-dark">{{ user.full_name }}</span> это список ваших пациентов</h5>#}
-                    <form class="row ml-2" method="post" action="#">
+                    <form class="row ml-2" method="get" action="{% url 'patient-find-by-full-name-view' %}">
                          {% csrf_token %}
                          <label for="#search-patient-input" class="pt-2 form-control-label text-dark font-bold mr-2">Найти пациента</label>
-                         <input type="text" class="form-control mr-2 mb-1" placeholder="ФИО пациента" style="width: 600px" id="search-patient-input" name=”txtSearch”>
+                         <input type="text" class="form-control mr-2 mb-1" placeholder="ФИО пациента" style="width: 600px" id="full-name" name="full-name">
                          <button type="submit" class="btn btn-info">Найти</button>
                      </form>
                     <script>
-                        $("#search-patient-input").autocomplete({
+                        $("#full-name").autocomplete({
                             minLength: 2,
                             source: "{% url 'patient-autocomplete-search-view' %}"
                         });
@@ -53,7 +53,7 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                {% for patient in patients %}
+                                {% for patient in page_obj %}
                                     <tr>
                                       <td>{{ patient.profile_id.full_name }}</td>
                                       <td>{{ patient.profile_id.birth_date }}</td>
@@ -68,6 +68,23 @@
                             </table>
                         </div>
                     </div>
+                <div class="pagination mt-2 ml-2 card-footer-item">
+                    <span class="step-links d-inline-flex">
+                        {% if page_obj.has_previous %}
+                            <a class="page-link" href="?page=1">первый</a>
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                        {% endif %}
+
+                        <span class="current page-link">
+                            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">последний</a>
+                        {% endif %}
+                    </span>
+                </div>
                 </div>
             </div>
          </div>
