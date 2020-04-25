@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
-from django.views import View
+from django.contrib import messages
 
 from profiles.models import Doctor
 from profiles.views import med_center
@@ -46,8 +45,10 @@ def sample_create(request):
                 price=500,
                 department_id=doctor.department_id.id
             )
+            messages.success(request, "Шаблон создан успешно!")
             return redirect(sample_list)
     else:
+        messages.error(request, "Произошла ошибка при создании :(")
         form = SampleForm()
 
     return render(request, "samples/samples-list.html")
@@ -60,6 +61,7 @@ def sample_update(request, sample_id):
         sample = Sample.objects.get(id=sample_id)
     except Sample.DoesNotExist:
         print("Sample Not Found")
+        messages.error(request, "Шаблон не найден :(")
         return redirect(sample_list)
 
     if request.method == "POST":
@@ -68,6 +70,7 @@ def sample_update(request, sample_id):
             sample.title = form.cleaned_data["title"]
             sample.description = form.cleaned_data["description"]
             sample.save()
+            messages.success(request, "Шаблон обновлен успешно!")
             return redirect(sample_list)
         print("Sample Form Is Not Valid")
         return redirect(sample_list)
@@ -82,4 +85,5 @@ def sample_delete(request, sample_id):
         print("Sample Not Found")
         return redirect(sample_list)
     sample.delete()
+    messages.success(request, "Шаблон удален успешно!")
     return redirect(sample_list)
