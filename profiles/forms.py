@@ -2,6 +2,46 @@ from django import forms
 from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
+from profiles.models import User, UserPhoneNumber
+
+
+class UserAddPhoneNumberForm(forms.ModelForm):
+    number = forms.CharField(
+        label="Номер телофона",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'add-doctor-number-input'
+            }
+        )
+    )
+
+    class Meta:
+        model = UserPhoneNumber
+        fields = ['number']
+
+
+class DoctorProfileUpdateForm(forms.Form):
+    full_name = forms.CharField(
+        label="Ф.И.О",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'profile-full-name-input'
+            }
+        )
+    )
+    image = forms.FileField(
+        required=False,
+        label="Выберите снимок",
+        widget=forms.FileInput(
+            attrs={
+                'name': 'conclusion_image',
+                'class': 'custom-file-input',
+                'placeholder': 'Выберите снимок',
+                'id': 'doctor-image-input',
+            }))
+
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(

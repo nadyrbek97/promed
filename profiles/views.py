@@ -5,14 +5,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 
-from med_center.models import MedicalCenter
+from profiles.forms import UserLoginForm, ConclusionForm, UserAddPhoneNumberForm, DoctorProfileUpdateForm
 from profiles.models import User, Patient, Doctor, UserPhoneNumber
+
+from med_center.models import MedicalCenter
 from visit.models import Visit
-from profiles.forms import UserLoginForm, ConclusionForm
 
 from samples.models import Sample
 
@@ -20,18 +22,6 @@ from .utils import render_to_pdf
 
 # Medical Center
 med_center = MedicalCenter.objects.first()
-
-
-def doctor_detail_page(request):
-    user = request.user.doctor
-    doctor = Doctor.objects.get(profile_id=user)
-    phone_numbers = UserPhoneNumber.objects.filter(user=doctor.profile_id)
-    context = {
-        'med_center': med_center,
-        'doctor': doctor,
-        'phone_numbers': phone_numbers
-    }
-    return render(request, 'profiles/doctor-page.html', context=context)
 
 
 def login(request):
@@ -191,3 +181,50 @@ def patient_autocomplete_search(request):
     return HttpResponse(data, mimetype)
 
 
+# Doctor Profile Actions
+def doctor_detail_page(request):
+    # forms
+    phone_form = UserAddPhoneNumberForm()
+    profile_update_form = DoctorProfileUpdateForm()
+
+    user = request.user.doctor
+    doctor = Doctor.objects.get(profile_id=user)
+    phone_numbers = UserPhoneNumber.objects.filter(user=doctor.profile_id)
+    context = {
+        'phone_form': phone_form,
+        'profile_update_form': profile_update_form,
+        'med_center': med_center,
+        'doctor': doctor,
+        'phone_numbers': phone_numbers
+    }
+    return render(request, 'profiles/doctor-page.html', context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def update_doctor_profile(request):
+    user = request.user
+    profile = None
+    doctor = None
+    try:
+        profile = User.objects.get(id=user.id)
+        doctor = Doctor.objects.get(profile_id=profile)
+    except (User.DoesNotExist, Doctor.DoesNotExist):
+        print("User not Found")
+        messages.error(request, "Пользователь не найден")
+        redirect(doctor_detail_page)
+
+    if request.method == "POST":
+        form = DoctorProfileUpdateForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            profile.full_name = form.cleaned_data["full_name"]
+            profile.save()
+            if form.cleaned_data['image'] is not None:
+                doctor.image = form.cleaned_data["image"]
+                doctor.save()
+            else:
+                print("IMAGE not chosen")
+            messages.success(request, "Профиль обновлен успешно!")
+            return redirect(doctor_detail_page)
+        print("Sample Form Is Not Valid")
+        return redirect(doctor_detail_page)
+    return redirect(doctor_detail_page)

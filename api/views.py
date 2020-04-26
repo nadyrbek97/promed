@@ -8,6 +8,7 @@ class ChartData(APIView):
     authentication_classes = []
     permission_classes = []
 
+    # Number of visits in last week
     def get(self, request, format=None):
         users_count = User.objects.all().count()
         labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']

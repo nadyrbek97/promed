@@ -50,7 +50,7 @@
                                                 {% for number in phone_numbers %}
                                                     <a type="button" data-toggle="modal" data-target="#numberDeleteModal-{{ number.id }}" class="badge badge-light mr-1">{{ number.number }} <span aria-hidden="true">&times;</span></a>
                                                     <!-- Delete Number Modal -->
-                                                    <div class="modal fade" id="numberDeleteModal-{{ number.id }}" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="numberDeleteModal-{{ number.id }}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -103,16 +103,20 @@
                                                     </button>
                                                   </div>
                                                   <div class="modal-body">
-                                                    <form action="#" method="POST">
+                                                    <form action="{% url 'update-doctor-profile-view' %}" method="POST" enctype="multipart/form-data">
                                                             {% csrf_token %}
                                                           <div class="form-group">
                                                             <label for="profile-full-name-input" class="col-form-label">Ф.И.О</label>
-                                                              <input id="profile-full-name-input" type="text">
+                                                              {{ profile_update_form.full_name }}
                                                           </div>
                                                           <div class="form-group">
-                                                            <label for="profile-image-input" class="col-form-label">Фотография</label>
-                                                              <input id="profile-image-input" type="file">
+                                                              <label for="doctor-image-input" class="col-form-label">Фотография профиля</label>
+                                                              <div class="custom-file mb-3">
+                                                                {{ profile_update_form.image }}
+                                                                <label class="custom-file-label" for="customFile">Выберите снимок</label>
+                                                              </div>
                                                           </div>
+
                                                         <button type="submit" class="btn btn-info">Обновить</button>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                                                     </form>
@@ -136,7 +140,7 @@
                                                             {% csrf_token %}
                                                           <div class="form-group">
                                                             <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>
-                                                              <input id="add-doctor-number-input" type="text">
+                                                              {{ phone_form.number }}
                                                           </div>
                                                         <button type="submit" class="btn btn-success">Добавить</button>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>

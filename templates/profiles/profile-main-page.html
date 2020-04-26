@@ -143,13 +143,18 @@
             <div class="container-fluid">
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                        <div id="message-alert" data-dismiss="alert" class="alert alert-dismissible alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
                             <div class="text-center">
                                 {{ message }}
                             </div>
                         </div>
                     {% endfor %}
                 {% endif %}
+                <script>
+                      $("#message-alert").fadeTo(2000, 500).slideUp(500, function(){
+                            $("#message-alert").slideUp(500);
+                        });
+                </script>
             </div>
             <!-- ============================================================== -->
             <!-- content  -->
