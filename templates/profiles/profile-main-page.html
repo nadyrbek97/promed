@@ -13,15 +13,17 @@
 
     <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
 
-    <link rel="stylesheet" href="{% static "profile/libs/css/style.css" %}">
-    <link rel="stylesheet" href="{% static "profile/vendor/fonts/circular-std/style.css" %}">
-    <link rel="stylesheet" href="{% static "profile/vendor/fonts/fontawesome/css/fontawesome-all.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/libs/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/fonts/circular-std/style.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/fonts/fontawesome/css/fontawesome-all.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/charts/morris-bundle/morris.css" %}">
+
 
     {#    <script src={% static 'profile/libs/js/main-js.js' %}></script>#}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <!-- jQuery UI !-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
@@ -122,7 +124,7 @@
                                 <a class="nav-link" href="{% url 'sample-list-view' %}">Шаблоны</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="#">Настройки</a>
+                                <a class="nav-link" href="{% url 'doctor-detail-page-view' %}">Профиль</a>
                             </li>
 
                         </ul>
@@ -250,7 +252,12 @@
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
-    <!-- jquery 3.3.1 -->
+    <!-- morris-chart js -->
+    <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
+    <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
+{#    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>#}
+{#    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>#}
+{#    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>#}
 
 
 </body>

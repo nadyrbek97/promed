@@ -10,7 +10,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 
 from med_center.models import MedicalCenter
-from profiles.models import User, Patient, Doctor
+from profiles.models import User, Patient, Doctor, UserPhoneNumber
 from visit.models import Visit
 from profiles.forms import UserLoginForm, ConclusionForm
 
@@ -20,6 +20,18 @@ from .utils import render_to_pdf
 
 # Medical Center
 med_center = MedicalCenter.objects.first()
+
+
+def doctor_detail_page(request):
+    user = request.user.doctor
+    doctor = Doctor.objects.get(profile_id=user)
+    phone_numbers = UserPhoneNumber.objects.filter(user=doctor.profile_id)
+    context = {
+        'med_center': med_center,
+        'doctor': doctor,
+        'phone_numbers': phone_numbers
+    }
+    return render(request, 'profiles/doctor-page.html', context=context)
 
 
 def login(request):

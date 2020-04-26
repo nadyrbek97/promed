@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # packages
     'xhtml2pdf',
     'corsheaders',
+    'rest_framework',
 
     # apps
     'profiles',

@@ -27,7 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('profiles/', include("profiles.urls")),
     path('samples/', include("samples.urls")),
-    path('visits/', include("visit.urls"))
+    path('visits/', include("visit.urls")),
+    path('api/', include("api.urls"))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

@@ -59,6 +59,11 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
+class UserPhoneNumberInline(admin.StackedInline):
+    model = UserPhoneNumber
+    extra = 1
+
+
 class MyUserAdmin(UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
@@ -67,7 +72,8 @@ class MyUserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('role', 'first_name', 'last_name')
+    inlines = [UserPhoneNumberInline]
+    list_display = ('role', 'full_name')
     list_filter = ('role',)
     # fieldsets while creating user
     fieldsets = (
