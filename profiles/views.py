@@ -228,3 +228,20 @@ def update_doctor_profile(request):
         print("Sample Form Is Not Valid")
         return redirect(doctor_detail_page)
     return redirect(doctor_detail_page)
+
+
+@login_required(login_url="/profiles/login/")
+def create_profile_phone_number(request):
+    user_id = request.user.id
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        form = UserAddPhoneNumberForm(request.POST or None)
+        if form.is_valid():
+            phone_number = UserPhoneNumber.objects.create(user_id=user_id,
+                                                          number=form.cleaned_data["number"])
+            phone_number.save()
+            messages.success(request, "Номер добавлен успешно!")
+            return redirect(doctor_detail_page)
+        else:
+            messages.error(redirect, "FORM IS INVALID")
+            return redirect(doctor_detail_page)

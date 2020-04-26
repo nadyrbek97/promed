@@ -136,7 +136,7 @@
                                                     </button>
                                                   </div>
                                                   <div class="modal-body">
-                                                    <form action="#" method="POST">
+                                                    <form action="{% url 'create-phone-number-view' %}" method="POST">
                                                             {% csrf_token %}
                                                           <div class="form-group">
                                                             <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>
