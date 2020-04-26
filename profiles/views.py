@@ -233,7 +233,6 @@ def update_doctor_profile(request):
 @login_required(login_url="/profiles/login/")
 def create_profile_phone_number(request):
     user_id = request.user.id
-    user = User.objects.get(id=user_id)
     if request.method == "POST":
         form = UserAddPhoneNumberForm(request.POST or None)
         if form.is_valid():
@@ -245,3 +244,15 @@ def create_profile_phone_number(request):
         else:
             messages.error(redirect, "FORM IS INVALID")
             return redirect(doctor_detail_page)
+
+
+@login_required(login_url="/profiles/login/")
+def profile_phone_number_delete(request, phone_id):
+    try:
+        sample = UserPhoneNumber.objects.get(id=phone_id)
+    except Sample.DoesNotExist:
+        print("Number Not Found")
+        return redirect(doctor_detail_page)
+    sample.delete()
+    messages.success(request, "Номер удален успешно!")
+    return redirect(doctor_detail_page)

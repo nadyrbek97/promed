@@ -63,7 +63,7 @@
                                                                     <label>Вы действительно хотите удалить номер {{ number.number }}?</label>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <form action="#" method="POST">
+                                                                    <form action="{% url 'delete-phone-number-view' number.id %}" method="POST">
                                                                         {% csrf_token %}
                                                                         <button type="submit" class="btn btn-primary">Да</button>
                                                                     </form>
