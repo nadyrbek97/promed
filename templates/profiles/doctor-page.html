@@ -162,44 +162,36 @@
             <!-- end doctor profile  -->
             <!-- ============================================================== -->
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="card-header text-center">
-                        <h3 class="text-dark font-bold">Пациенты</h3>
+                        <h3 class="text-dark font-bold">Количество заключений за 7 дней</h3>
                     </div>
                     <canvas id="my-chart" width="200" height="200" class="border"></canvas>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="card-header text-center text-dark">
-                        <h3 class="text-dark font-bold">Заключения</h3>
+                        <h3 class="text-dark font-bold">Заключения по услугам</h3>
                     </div>
                     <canvas id="my-chart-2" class="border" width="200" height="200"></canvas>
-                </div>
-                <div class="col-sm-4">
-                    <div class="card-header text-center text-dark">
-                        <h3 class="text-dark font-bold">Заключения</h3>
-                    </div>
-                    <canvas id="my-chart-3" class="border" width="200" height="200"></canvas>
                 </div>
                 <script>
                     var default_data = [];
                     var labels = [];
                     $.ajax({
                        method: "GET",
-                       url: "/api/chart/data/",
+                       url: "{% url 'visits-for-last-week-data-view' %}",
                        success: function (data) {
                            labels = data.labels;
                            default_data = data.default;
-                           setChart();
+                           setChartForLassWeek();
                        },
                         error: function (error_data) {
                            console.log("error");
                             console.log((error_data))
                         }
                     });
-                    function setChart() {
+                    function setChartForLassWeek() {
                         var ctx = document.getElementById("my-chart");
-                        var ctx2 = document.getElementById("my-chart-2");
-                        var ctx3 = document.getElementById("my-chart-3");
                         var myChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
@@ -224,8 +216,24 @@
                                         'rgb(255,163,30)',
                                     ],
                                 }]
-                           },
+                            },
                         });
+                    }
+                    $.ajax({
+                       method: "GET",
+                       url: "{% url 'visits-by-service-data-view' %}",
+                       success: function (data) {
+                           labels = data.labels;
+                           default_data = data.default;
+                           setChartVisitsByService();
+                       },
+                        error: function (error_data) {
+                           console.log("error");
+                            console.log((error_data))
+                        }
+                    });
+                    function setChartVisitsByService() {
+                        var ctx2 = document.getElementById("my-chart-2");
                         var myChart2 = new Chart(ctx2, {
                             type: 'polarArea',
                             data: {
@@ -244,25 +252,8 @@
                                 }]
                            },
                         });
-                        var myChart3 = new Chart(ctx3, {
-                            type: 'radar',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Пациенты',
-                                    data: default_data,
-                                    backgroundColor: [
-                                        'rgb(255, 99, 132)',
-                                        'rgb(74,129,255)',
-                                        'rgb(255,251,57)',
-                                        'rgb(73,255,138)',
-                                        'rgb(183,105,255)',
-                                        'rgb(255,163,30)',
-                                    ],
-                                }]
-                           },
-                        });
                     }
+
                 </script>
             </div>
     </div>
