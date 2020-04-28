@@ -102,31 +102,32 @@
         <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <a class="d-xl-none d-lg-none" href="#">Меню</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav flex-column">
+                            {% with url_name=request.resolver_match.url_name %}
                             <li class="nav-divider ">
                                 <h4 class="text-light font-bold">Меню</h4>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="{% url 'profile-main-view' %}">Главная</a>
+                                <a class="nav-link {% if url_name == 'profile-main-view' %}active{% endif %}" href="{% url 'profile-main-view' %}">Главная</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="{% url 'visit-list-view' %}">Заключения</a>
+                                <a class="nav-link {% if url_name == 'visit-list-view' %}active{% endif %}" href="{% url 'visit-list-view' %}">Заключения</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="{% url 'patient-list-view' %}">Пациенты</a>
+                                <a class="nav-link {% if url_name == 'patient-list-view' %}active{% endif %}" href="{% url 'patient-list-view' %}">Пациенты</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="{% url 'sample-list-view' %}">Шаблоны</a>
+                                <a class="nav-link {% if url_name == 'sample-list-view' %}active{% endif %}" href="{% url 'sample-list-view' %}">Шаблоны</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="{% url 'doctor-detail-page-view' %}">Профиль</a>
+                                <a class="nav-link {% if url_name == 'doctor-detail-page-view' %}active{% endif %}" href="{% url 'doctor-detail-page-view' %}">Профиль</a>
                             </li>
-
+                            {% endwith %}
                         </ul>
                     </div>
                 </nav>

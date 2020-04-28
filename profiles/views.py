@@ -11,6 +11,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 
 from profiles.forms import UserLoginForm, ConclusionForm, UserAddPhoneNumberForm, DoctorProfileUpdateForm
+from profiles.forms import PatientProfileUpdateForm
 from profiles.models import User, Patient, Doctor, UserPhoneNumber
 
 from med_center.models import MedicalCenter
@@ -31,7 +32,11 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('profile-main-view')
+            role = user.role
+            if role == 0:
+                return redirect('profile-main-view')
+            else:
+                return redirect('patient-main-page')
         context = {
             "med_center": med_center,
             "form": form
@@ -232,6 +237,7 @@ def update_doctor_profile(request):
 
 @login_required(login_url="/profiles/login/")
 def create_profile_phone_number(request):
+    user_role = User.objects.get(id=request.user.id).role
     user_id = request.user.id
     if request.method == "POST":
         form = UserAddPhoneNumberForm(request.POST or None)
@@ -240,19 +246,77 @@ def create_profile_phone_number(request):
                                                           number=form.cleaned_data["number"])
             phone_number.save()
             messages.success(request, "Номер добавлен успешно!")
-            return redirect(doctor_detail_page)
+            if user_role == 0:
+                return redirect(doctor_detail_page)
+            else:
+                return redirect(patient_main_page)
         else:
             messages.error(redirect, "FORM IS INVALID")
-            return redirect(doctor_detail_page)
+            if user_role == 0:
+                return redirect(doctor_detail_page)
+            else:
+                return redirect(patient_main_page)
 
 
 @login_required(login_url="/profiles/login/")
 def profile_phone_number_delete(request, phone_id):
+    user_role = User.objects.get(id=request.user.id).role
     try:
         sample = UserPhoneNumber.objects.get(id=phone_id)
     except Sample.DoesNotExist:
         print("Number Not Found")
-        return redirect(doctor_detail_page)
+        if user_role == 0:
+            return redirect(doctor_detail_page)
+        else:
+            return redirect(patient_main_page)
     sample.delete()
     messages.success(request, "Номер удален успешно!")
-    return redirect(doctor_detail_page)
+    if user_role == 0:
+        return redirect(doctor_detail_page)
+    else:
+        return redirect(patient_main_page)
+
+
+# Client views
+@login_required(login_url="/profiles/login/")
+def patient_main_page(request):
+    phone_form = UserAddPhoneNumberForm()
+    profile_update_form = PatientProfileUpdateForm()
+    user = request.user
+    patient = Patient.objects.get(profile_id=user)
+    phone_numbers = UserPhoneNumber.objects.filter(user=patient.profile_id)
+    context = {
+        'phone_form': phone_form,
+        'profile_update_form': profile_update_form,
+        'med_center': med_center,
+        'patient': patient,
+        'phone_numbers': phone_numbers
+    }
+    return render(request, 'profiles/patient-main-page.html', context=context)
+
+
+@login_required(login_url="/profiles/login/")
+def patient_update_profile(request):
+    profile = None
+    patient = None
+    try:
+        profile = User.objects.get(id=request.user.id)
+        patient = Patient.objects.get(profile_id=profile)
+    except (User.DoesNotExist, Patient.DoesNotExist):
+        print("User not Found")
+        messages.error(request, "Пользователь не найден")
+        redirect(patient_main_page)
+
+    if request.method == "POST":
+        form = PatientProfileUpdateForm(request.POST or None)
+        if form.is_valid():
+            profile.full_name = form.cleaned_data["full_name"]
+            profile.email = form.cleaned_data["email"]
+            patient.address = form.cleaned_data["address"]
+            profile.save()
+            patient.save()
+            messages.success(request, "Профиль обновлен успешно!")
+            return redirect(patient_main_page)
+        print("Sample Form Is Not Valid")
+        return redirect(patient_main_page)
+    return redirect(patient_main_page)

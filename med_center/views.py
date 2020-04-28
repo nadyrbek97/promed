@@ -2,12 +2,16 @@ from django.shortcuts import render
 
 from med_center.models import MedicalCenter, MedCenterPhoto
 from branch.models import Branch, BranchPhoneNumber
-from profiles.models import Doctor
+from profiles.models import Doctor, User
 from department.models import Department
 from services.models import Service
 
 
 def main_page_view(request):
+    # user info
+    user_role = None
+    if request.user.is_authenticated:
+        user_role = User.objects.get(id=request.user.id).role
 
     # med center
     med_center = MedicalCenter.objects.get(title="Forever Med")
@@ -38,7 +42,7 @@ def main_page_view(request):
 
         "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
-
+        "user_role": user_role,
         "doctors": doctors
 
     }

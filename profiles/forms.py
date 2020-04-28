@@ -5,6 +5,37 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from profiles.models import User, UserPhoneNumber
 
 
+class PatientProfileUpdateForm(forms.Form):
+    full_name = forms.CharField(
+        label="Ф.И.О",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'profile-full-name-input'
+            }
+        )
+    )
+    address = forms.CharField(
+        required=False,
+        label="Адресс",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'profile-address-input'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        required=False,
+        label="Email",
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'name@example.com',
+                'id': 'profile-email-input',
+                'class': 'form-control'}))
+
+
 class UserAddPhoneNumberForm(forms.ModelForm):
     number = forms.CharField(
         label="Номер телофона",
