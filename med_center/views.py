@@ -29,7 +29,7 @@ def main_page_view(request):
     main_branch_number = main_branch.numbers.first()
 
     # doctors
-    doctors = Doctor.objects.all()
+    doctors = Doctor.objects.filter(profile_id__is_superuser=False)
 
     context = {
         "med_center": med_center,
