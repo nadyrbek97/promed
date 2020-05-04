@@ -42,7 +42,7 @@ class Doctor(models.Model):
         verbose_name_plural = _("Doctors")
 
     def __str__(self):
-        return f"{self.profile_id.full_name}"
+        return f"{self.profile_id.full_name} ({self.department_id.title})"
 
 
 class UserPhoneNumber(models.Model):
