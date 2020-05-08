@@ -33,7 +33,10 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 
-
+    <!-- HBR uploader -->
+    <link rel="stylesheet" href="{% static '/uploadHBR/dist/css/style.min.css' %}">
+    <script src="{% static '/uploadHBR/dist/js/uploadHBR.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <title>
         {% block title %}
         {{ med_center.title }} profile page
@@ -207,16 +210,56 @@
                             {{ form.text }}
 {#                            <textarea id="conclusionPDF" class="form-control" id="exampleFormControlTextarea1" rows="20" required></textarea>#}
                         </div>
-                        <div class="custom-file mb-3">
+                        <div class="custom-file">
 {#                            <input type="file" class="custom-file-input" id="customFile" required>#}
                             {{ form.image }}
+                            <button id="printButton" type="submit" class="btn btn-info form-group mt-2 mb-2" data-toggle="tooltip"
+                                    data-placement="top" title="Tooltip on top">
+                                Создать заключение
+                            </button>
+                            <div></div>
+                            <div class="form-group gallery" style="display: inline">
+                            <!-- Images Place -->
+                            </div>
+
                             <label class="custom-file-label" for="customFile">Выберите снимок</label>
+                            <script>
+                                 $(document).ready(function(){
+                                      $("#images-input").change(function(){
+                                        console.log('image uploaded');
+                                        $(".gallery").empty(); //you can remove this code if you want previous user input
+                                        for(let i=0;i<this.files.length;++i){
+                                            let filereader = new FileReader();
+                                            let $img=jQuery.
+                                            parseHTML("<img src='' width='250px' height='200px' style='border: #cccccc solid 2px; display:inline;'>");
+                                            filereader.onload = function(){
+                                                $img[0].src=this.result;
+                                            };
+                                            filereader.readAsDataURL(this.files[i]);
+                                            $(".gallery").append($img);
+                                        }
+                                        $(".gallery").width(100).height(200);
+                                      });
+
+                                    });
+                                {#$(document).on('ready',()=>{#}
+                                {#    $("#images-input").on('change',function(){#}
+                                {#        console.log('Image uploaded')#}
+                                {#                $(".gallery").empty();//you can remove this code if you want previous user input#}
+                                {#                for(let i=0;i<this.files.length;++i){#}
+                                {#                    let filereader = new FileReader();#}
+                                {#                    let $img=jQuery.parseHTML("<img src=''>");#}
+                                {#                    filereader.onload = function(){#}
+                                {#                        $img[0].src=this.result;#}
+                                {#                    };#}
+                                {#                    filereader.readAsDataURL(this.files[i]);#}
+                                {#                    $(".gallery").append($img);#}
+                                {#                }#}
+                                {#    });#}
+
+                            </script>
                         </div>
 
-                        <button id="printButton" type="submit" class="btn btn-info" data-toggle="tooltip"
-                                data-placement="top" title="Tooltip on top">
-                            Создать заключение
-                        </button>
                     </form>
 
                 </div>
