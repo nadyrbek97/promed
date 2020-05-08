@@ -65,21 +65,24 @@ def profile_main_view(request):
 
     if request.method == "POST":
         form = ConclusionForm(data=request.POST)
+        files = request.FILES.getlist('image')
+        url_list = []
         if form.is_valid():
             print("is valid")
+            print(files)
             # get doctor from request.user
             user = request.user
             # get image from request
-            image = request.FILES['image']
-            print(image.name)
-            print(image.size)
-            fs = FileSystemStorage()
-            image_name = fs.save(image.name, image)
-            url = fs.url(image_name)
-            print(url)
-            # ---save image finished----
+            for image in files:
+                print(image.name)
+                print(image.size)
+                fs = FileSystemStorage()
+                image_name = fs.save(image.name, image)
+                url_list.append(fs.url(image_name))
+                print(url_list)
+                # ---save image finished----
 
-            doctor_name_surname = user.first_name + " " + user.last_name
+            doctor_name_surname = User.objects.get(id=user.id).full_name
             # get data from form
             patient_name_surname = form.cleaned_data["user_name_surname"]
             email = form.cleaned_data["email"]
@@ -107,7 +110,7 @@ def profile_main_view(request):
                 'doctor_name': doctor_name_surname,
                 'patient_name': patient_name_surname,
                 'text': text,
-                'image': url,
+                'images': url_list,
                 'today': datetime.date.today(),
             }
             pdf = render_to_pdf('pdf/conclusion.html', data)

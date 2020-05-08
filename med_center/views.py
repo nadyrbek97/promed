@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.mail import EmailMessage
 
 from med_center.models import MedicalCenter, MedCenterPhoto
 from med_center.forms import AppointmentForm
@@ -19,6 +20,13 @@ def appointment_form(request):
             print(form.cleaned_data['date_time'])
             print(form.cleaned_data['doctor_choice'])
             print(form.cleaned_data['patient_preference'])
+            email_message = \
+                form.cleaned_data['patient_full_name'] + " \n" \
+                + form.cleaned_data['patient_phone_number'] + "\n "
+            email = EmailMessage('Message from forever Med',
+                                 'email_message',
+                                 ['nsultanov312@gmail.com'])
+            email.send()
             messages.success(request, "Запись произошла успешно!")
             return redirect(main_page_view)
         print("Appointment Form Is Not Valid")

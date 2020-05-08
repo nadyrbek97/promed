@@ -115,9 +115,11 @@ class ConclusionForm(forms.Form):
         label="Выберите снимок",
         widget=forms.FileInput(
             attrs={
-                'name': 'conclusion_image',
+                'name': 'image',
                 'placeholder': 'Выберите снимок',
-                'class': 'custom-file-input', }))
+                'class': 'custom-file-input',
+                'multiple': 'true',
+            }))
 
     def clean_user_name_surname(self):
         user_name_surname = self.cleaned_data['user_name_surname']

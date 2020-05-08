@@ -25,3 +25,12 @@ class Visit(models.Model):
 
     def __str__(self):
         return f"visit at {self.start_time} for doctor {self.doctor.profile_id.full_name}"
+
+
+class VisitImage(models.Model):
+    visit_id = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='visit_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"visit image {self.uploaded_at}"
