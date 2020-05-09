@@ -19,15 +19,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from med_center.views import main_page_view, appointment_form, about_page, departments_page
+from med_center.views import main_page_view, appointment_form, about_page, departments_page, contacts_page
 
 
 urlpatterns = [
+    # main panel
     path('', main_page_view, name='main-page'),
     path('appointment-form/', appointment_form, name='appointment-form-view'),
     path('about/', about_page, name='about-page'),
     path('departments/', departments_page, name='departments-page'),
+    path('contacts/', contacts_page, name='contacts-page'),
+    # admin panel
     path('admin/', admin.site.urls),
+    # applications' urls
     path('profiles/', include("profiles.urls")),
     path('samples/', include("samples.urls")),
     path('visits/', include("visit.urls")),

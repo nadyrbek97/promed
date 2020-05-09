@@ -76,6 +76,23 @@ def departments_page(request):
     return render(request, 'med_center/departments.html', context=context)
 
 
+def contacts_page(request):
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
+
+    logo = med_center.photos.filter(is_logo=True).first()
+    doctors = Doctor.objects.filter(profile_id__is_superuser=False)
+    context = {
+        "med_center": med_center,
+        "main_branch_number": main_branch_number.number,
+        "logo": logo,
+        "doctors": doctors
+    }
+
+    return render(request, 'med_center/contacts.html', context=context)
+
+
 def main_page_view(request):
     # user info
     user_role = None
