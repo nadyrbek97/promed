@@ -142,6 +142,9 @@
                                                             <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>
                                                               {{ phone_form.number }}
                                                           </div>
+                                                        <script>
+                                                            $('#add-doctor-number-input').inputmask("0999-999-999")
+                                                        </script>
                                                         <button type="submit" class="btn btn-success">Добавить</button>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                                                     </form>
