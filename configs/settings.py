@@ -81,6 +81,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'configs.wsgi.application'
 
 # Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'

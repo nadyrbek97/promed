@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from med_center.models import MedicalCenter, MedCenterPhoto
 from med_center.forms import AppointmentForm
 
 from branch.models import Branch, BranchPhoneNumber
 from profiles.models import Doctor, User
+from profiles.views import med_center
 from department.models import Department
 from services.models import Service
 
@@ -15,18 +19,21 @@ def appointment_form(request):
     if request.method == "POST":
         form = AppointmentForm(request.POST or None)
         if form.is_valid():
-            print(form.cleaned_data['patient_full_name'])
-            print(form.cleaned_data['patient_phone_number'])
-            print(form.cleaned_data['date_time'])
-            print(form.cleaned_data['doctor_choice'])
-            print(form.cleaned_data['patient_preference'])
-            email_message = \
-                form.cleaned_data['patient_full_name'] + " \n" \
-                + form.cleaned_data['patient_phone_number'] + "\n "
-            email = EmailMessage('Message from forever Med',
-                                 'email_message',
-                                 ['nsultanov312@gmail.com'])
-            email.send()
+            print("Email sent")
+            admin_user_email = User.objects.get(username='admin').email
+            mail_context = {
+                'patient_full_name': form.cleaned_data['patient_full_name'],
+                'patient_phone_number': form.cleaned_data['patient_phone_number'],
+                'date_time': form.cleaned_data['date_time'],
+                'patient_preference': form.cleaned_data['patient_preference'],
+                'doctor_choice': form.cleaned_data['doctor_choice'],
+            }
+            html_message = render_to_string('pdf/mail_template.html', context=mail_context)
+            plain_text_message = strip_tags(html_message)
+
+            send_mail('Test message', plain_text_message,
+                      settings.EMAIL_HOST_USER, [admin_user_email, ],
+                      html_message=html_message)
             messages.success(request, "Запись произошла успешно!")
             return redirect(main_page_view)
         print("Appointment Form Is Not Valid")
