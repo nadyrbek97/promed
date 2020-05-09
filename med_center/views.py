@@ -42,6 +42,22 @@ def appointment_form(request):
         return redirect(main_page_view)
 
 
+def about_page(request):
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
+
+    logo = med_center.photos.filter(is_logo=True).first()
+
+    context = {
+        "med_center": med_center,
+        "main_branch_number": main_branch_number.number,
+        "logo": logo
+    }
+
+    return render(request, 'med_center/about.html', context=context)
+
+
 def main_page_view(request):
     # user info
     user_role = None

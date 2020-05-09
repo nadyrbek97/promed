@@ -19,12 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from med_center.views import main_page_view, appointment_form
+from med_center.views import main_page_view, appointment_form, about_page
 
 
 urlpatterns = [
     path('', main_page_view, name='main-page'),
     path('appointment-form/', appointment_form, name='appointment-form-view'),
+    path('about/', about_page, name='about-page'),
     path('admin/', admin.site.urls),
     path('profiles/', include("profiles.urls")),
     path('samples/', include("samples.urls")),
