@@ -119,6 +119,7 @@ class ConclusionForm(forms.Form):
                 'placeholder': 'Выберите снимок',
                 'class': 'custom-file-input',
                 'multiple': 'true',
+                'id': 'image-input-file'
             }))
 
     def clean_user_name_surname(self):

@@ -225,13 +225,13 @@
                             <label class="custom-file-label" for="customFile">Выберите снимок</label>
                             <script>
                                  $(document).ready(function(){
-                                      $("#images-input").change(function(){
+                                      $("#image-input-file").change(function(){
                                         console.log('image uploaded');
                                         $(".gallery").empty(); //you can remove this code if you want previous user input
                                         for(let i=0;i<this.files.length;++i){
                                             let filereader = new FileReader();
                                             let $img=jQuery.
-                                            parseHTML("<img src='' width='250px' height='200px' style='border: #cccccc solid 2px; display:inline;'>");
+                                            parseHTML("<img src='' width='400px' height='380px' style='border: #cccccc solid 2px; display:inline;'>");
                                             filereader.onload = function(){
                                                 $img[0].src=this.result;
                                             };

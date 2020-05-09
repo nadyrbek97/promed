@@ -109,7 +109,7 @@ def profile_main_view(request):
                 'med_center': med_center.title,
                 'doctor_name': doctor_name_surname,
                 'patient_name': patient_name_surname,
-                'text': text,
+                'text': text.split("\n"),
                 'images': url_list,
                 'today': datetime.date.today(),
             }

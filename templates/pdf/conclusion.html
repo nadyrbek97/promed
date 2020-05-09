@@ -70,9 +70,11 @@
             </div>
             
             <div>
-                <p>{{ text }}</p>
+                {% for t in text %}
+                    <p>  {{ t }}</p>
+                {% endfor %}
                 {% for image in images %}
-                    <img src="{{ image }}" alt="image" width="200" height="150" style="margin-right: 15px">
+                    <img src="{{ image }}" alt="image" width="200" height="200" style="margin-right: 15px">
                 {% endfor %}
                 <hr class='hrItem' />
                 <div class="details-left">
