@@ -24,7 +24,9 @@ class Visit(models.Model):
         verbose_name_plural = _("Visits")
 
     def __str__(self):
-        return f"visit at {self.start_time} for doctor {self.doctor.profile_id.full_name}"
+        return f"Дата: {self.start_time.day}/{self.start_time.month}/{self.start_time.year} " \
+               f"Время: {self.start_time.hour}:{self.start_time.minute}." \
+               f" Доктор: {self.doctor.profile_id.full_name}"
 
 
 class VisitImage(models.Model):
