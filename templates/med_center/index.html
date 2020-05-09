@@ -180,29 +180,72 @@
             <ul class="list-unstyled probootstrap-light mb-4">
                 {# DEPARTAMENTS #}
                 {% for d in departments %}
-                    <li><a href="#">{{ d.title }}</a></li>
+                    <li><a class="get-service" type="button">{{ d.title }} <span id="{{ d.id }}"></span></a></li>
                 {% endfor %}
 
             </ul>
 {#            <p><a href="#" class="arrow-link text-white">More departments  <i class="icon-chevron-right"></i></a></p>#}
           </div>
+
         </div>
         <div class="col-md-9 pl-md-5 pl-0">
-          <div class="row mb-5">
-
-                {# Services #}
-                {% for s in services %}
-                      <div class="col-lg-4 col-md-6">
-                        <div class="media d-block mb-4 text-left probootstrap-media">
-                            <div class="probootstrap-icon mb-3"><span class="flaticon-microscope display-4"></span></div>
-                              <div class="media-body">
-                                <h3 class="h5 mt-0 text-secondary">{{ s.title }}</h3>
-                                <p> {{ s.price }} CОМ </p>
-                              </div>
-                        </div>
-                      </div>
-                {% endfor %}
+          <div class="row mb-5" id="service-section">
+            {# Services #}
+            {% for s in services %}
+                  <div class="col-lg-4 col-md-6">
+                    <div class="media d-block mb-4 text-left probootstrap-media">
+                        <div class="probootstrap-icon mb-3"><span class="flaticon-microscope display-4"></span></div>
+                          <div class="media-body">
+                            <h3 class="h5 mt-0 text-secondary">{{ s.title }}</h3>
+                            <p> {{ s.price }} CОМ </p>
+                          </div>
+                    </div>
+                  </div>
+            {% endfor %}
           </div>
+            <script>
+                $('.get-service').click(function (event) {
+                    var dep_id = $('span', this).attr('id');
+                    var service_section = $('#service-section')
+
+                     $.ajax({
+                            url: '/api/services/list/' + dep_id + '/',
+                            method: 'GET',
+                            data: ({
+                                'department_id': dep_id
+                            }),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            success: function (data) {
+                                service_section.html('')
+                                data.services.forEach(
+                                    service => service_section.append(
+                                        render_service_section(service.title, service.price)
+                                    )
+                                )
+                            },
+                            error: function (request, error) {
+                                console.log(request);
+                                console.log(error);
+                            }
+                        });
+                    console.log(dep_id);
+                    console.log("clicked");
+                })
+
+                function render_service_section(service_title, service_price) {
+                    html_item = '<div class="col-lg-4 col-md-6">\n' +
+                        '                    <div class="media d-block mb-4 text-left probootstrap-media">\n' +
+                        '                        <div class="probootstrap-icon mb-3"><span class="flaticon-microscope display-4"></span></div>\n' +
+                        '                          <div class="media-body">\n' +
+                        '                            <h3 class="h5 mt-0 text-secondary">' + service_title + '</h3>\n' +
+                        '                            <p> ' + service_price + ' сом </p>\n' +
+                        '                          </div>\n' +
+                        '                    </div>\n' +
+                        '                  </div>'
+                    return html_item
+                }
+            </script>
         </div>
       </div>
     </div>

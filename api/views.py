@@ -1,7 +1,23 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from api.serializers import ServiceSerializer
+
 from profiles.models import User
+from services.models import Service
+
+
+class GetServicesByDepartmentId(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        result = {}
+        department_id = kwargs.get('department_id')
+        services = Service.objects.filter(department_id=department_id)
+        serialized_services = ServiceSerializer(services, many=True)
+        result['services'] = serialized_services.data
+        return Response(data=result)
 
 
 class VisitsForLastWeekData(APIView):

@@ -103,7 +103,7 @@ def main_page_view(request):
     departments = Department.objects.all()
 
     # services
-    services = Service.objects.filter(department_id=1)
+    services = Service.objects.filter(department_id=departments.first())
 
     # doctors
     doctors = Doctor.objects.filter(profile_id__is_superuser=False)
