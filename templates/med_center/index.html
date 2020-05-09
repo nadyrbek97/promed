@@ -308,7 +308,7 @@
                                     '13:00', '13:30',
                                     '14:00', '14:30',
                                     '15:00', '15:30',
-                                    '16:20', '16:00',
+                                    '16:00', '16:30',
                                     '17:00', '17:30'
                                  ]
                             });
@@ -342,10 +342,12 @@
         <div class="col-md-4">
           <h3 class="heading">Быстрые ссылки</h3>
           <ul class="list-unstyled probootstrap-footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Отделения</a></li>
-            <li><a href="#">О нас</a></li>
-            <li><a href="#">Контакты</a></li>
+            {% with url_name=request.resolver_match.url_name %}
+                <li class="{% if url_name == 'main-page' %}active{% endif %}"><a href="{% url 'main-page' %}">Home</a></li>
+                <li class="{% if url_name == 'departments-page' %}active{% endif %}"><a href="{% url 'departments-page' %}">Отделения</a></li>
+                <li class="{% if url_name == 'about-page' %}active{% endif %}"><a href="{% url 'about-page' %}">О нас</a></li>
+                <li class="{% if url_name == 'contacts-page' %}active{% endif %}"><a href="{% url 'contacts-page' %}">Контакты</a></li>
+            {% endwith %}
           </ul>
         </div>
         <div class="col-md-4">

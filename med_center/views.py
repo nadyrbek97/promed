@@ -14,6 +14,14 @@ from profiles.views import med_center
 from department.models import Department
 from services.models import Service
 
+# med center
+med_center = MedicalCenter.objects.first()
+logo = med_center.photos.filter(is_logo=True).first()
+schedule_times = med_center.schedule_times.all()
+# branch
+main_branch = Branch.objects.get(med_center_id=med_center.id)
+main_branch_number = main_branch.numbers.first()
+
 
 def appointment_form(request):
     if request.method == "POST":
@@ -43,15 +51,12 @@ def appointment_form(request):
 
 
 def about_page(request):
-    # branch
-    main_branch = Branch.objects.get(med_center_id=med_center.id)
-    main_branch_number = main_branch.numbers.first()
-
-    logo = med_center.photos.filter(is_logo=True).first()
 
     context = {
         "med_center": med_center,
+        "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
+        "schedules": schedule_times,
         "logo": logo
     }
 
@@ -59,16 +64,14 @@ def about_page(request):
 
 
 def departments_page(request):
-    # branch
-    main_branch = Branch.objects.get(med_center_id=med_center.id)
-    main_branch_number = main_branch.numbers.first()
 
-    logo = med_center.photos.filter(is_logo=True).first()
     departments = Department.objects.all()
 
     context = {
         "med_center": med_center,
+        "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
+        "schedules": schedule_times,
         "logo": logo,
         "departments": departments
     }
@@ -77,16 +80,13 @@ def departments_page(request):
 
 
 def contacts_page(request):
-    # branch
-    main_branch = Branch.objects.get(med_center_id=med_center.id)
-    main_branch_number = main_branch.numbers.first()
-
-    logo = med_center.photos.filter(is_logo=True).first()
     doctors = Doctor.objects.filter(profile_id__is_superuser=False)
     context = {
         "med_center": med_center,
+        "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
         "logo": logo,
+        "schedules": schedule_times,
         "doctors": doctors
     }
 
@@ -99,20 +99,11 @@ def main_page_view(request):
     if request.user.is_authenticated:
         user_role = User.objects.get(id=request.user.id).role
 
-    # med center
-    med_center = MedicalCenter.objects.get(title="Forever Med")
-    logo = med_center.photos.filter(is_logo=True).first()
-    schedule_times = med_center.schedule_times.all()
-
     # departments
     departments = Department.objects.all()
 
     # services
     services = Service.objects.filter(department_id=1)
-
-    # branch
-    main_branch = Branch.objects.get(med_center_id=med_center.id)
-    main_branch_number = main_branch.numbers.first()
 
     # doctors
     doctors = Doctor.objects.filter(profile_id__is_superuser=False)
