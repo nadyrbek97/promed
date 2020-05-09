@@ -53,7 +53,7 @@
         <ul class="navbar-nav mr-auto">
             {% with url_name=request.resolver_match.url_name %}
                 <li class="nav-item {% if url_name == 'main-page' %}active{% endif %}"><a href="{% url 'main-page' %}" class="nav-link pl-0">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Отделения</a></li>
+                <li class="nav-item {% if url_name == 'departments-page' %}active{% endif %}"><a href="{% url 'departments-page' %}" class="nav-link">Отделения</a></li>
                 <li class="nav-item {% if url_name == 'about-page' %}active{% endif %}"><a href="{% url 'about-page' %}" class="nav-link">О нас</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Контакты</a></li>
             {% endwith %}
