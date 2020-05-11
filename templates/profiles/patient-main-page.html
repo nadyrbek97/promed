@@ -116,7 +116,7 @@
                                 <a class="nav-item nav-link {% if url_name == 'patient-main-page' %}active{% endif %}" href="{% url 'patient-main-page' %}">Профиль</a>
                             </li>
                             <li class="nav-divider">
-                                <a class="nav-link" href="#">Заключения</a>
+                                <a class="nav-link {% if url_name == 'visit-list-view' %}active{% endif %}" href="{% url 'visit-list-view' %}">Заключения</a>
                             </li>
                             <li class="nav-divider">
                                 <a class="nav-link" href="#">Акции</a>
@@ -219,7 +219,7 @@
                                                         <a type="button" data-toggle="modal" data-target="#addUserNumberModal" href="#" class="badge badge-light mr-1 bg-success"> + </a>
                                                     </div>
                                                     <div class="mt-3">
-                                                        <button id="doctor-profile-update-button" class="btn btn-info">Редактировать профиль</button>
+                                                        <button id="doctor-profile-update-button" class="btn btn-info mb-2">Редактировать профиль</button>
                                                         <button id="patient-appointment-button" class="btn btn-success">Записаться на прием</button>
                                                         <script>
                                                             $(document).ready(function(){

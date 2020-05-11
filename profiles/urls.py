@@ -20,6 +20,6 @@ urlpatterns = [
     path('delete/phone-number/<int:phone_id>/', profile_phone_number_delete, name='delete-phone-number-view'),
     # client profile
     path('patient/main/', patient_main_page, name='patient-main-page'),
-    path('patient/update/', patient_update_profile, name='update-patient-profile-view')
+    path('patient/update/', patient_update_profile, name='update-patient-profile-view'),
     # path('registration/', profile_main_view, name='profile-main-view'),
 ]

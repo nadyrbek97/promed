@@ -280,7 +280,7 @@ def profile_phone_number_delete(request, phone_id):
         return redirect(patient_main_page)
 
 
-# Client views
+# Patient views
 @login_required(login_url="/profiles/login/")
 def patient_main_page(request):
     phone_form = UserAddPhoneNumberForm()
@@ -323,3 +323,5 @@ def patient_update_profile(request):
         print("Sample Form Is Not Valid")
         return redirect(patient_main_page)
     return redirect(patient_main_page)
+
+

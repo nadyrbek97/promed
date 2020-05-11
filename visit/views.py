@@ -5,18 +5,22 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from profiles.models import Doctor
+from profiles.models import Doctor, User
 from visit.models import Visit
 from profiles.views import med_center
 
 
 @login_required(login_url="/profiles/login/")
-def visit_list(request):
+def user_visit_list(request):
     # Get doctor first
-    doctor_user_id = request.user.doctor
-    doctor = Doctor.objects.get(profile_id=doctor_user_id)
-    # Patients
-    visits = Visit.objects.filter(doctor=doctor)
+    user_id = request.user.id
+    user = User.objects.get(id=user_id)
+    # Visits
+    visits = []
+    if user.role == 0:
+        visits = Visit.objects.filter(doctor__profile_id=user_id)
+    elif user.role == 1:
+        visits = Visit.objects.filter(patient__profile_id=user_id)
     paginator = Paginator(visits, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -24,8 +28,10 @@ def visit_list(request):
         "page_obj": page_obj,
         "med_center": med_center
     }
-
-    return render(request, "visit/visits-list.html", context=context)
+    if user.role == 0:
+        return render(request, "visit/visits-list.html", context=context)
+    elif user.role == 1:
+        return render(request, "visit/patient-visit-list.html", context=context)
 
 
 @login_required(login_url="/profiles/login/")
@@ -61,3 +67,4 @@ def filter_by_date(request):
     }
 
     return render(request, "visit/visits-list.html", context=context)
+
