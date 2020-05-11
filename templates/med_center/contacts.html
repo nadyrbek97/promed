@@ -23,7 +23,7 @@
             {% for doctor in doctors %}
                 <h5>{{ doctor.profile_id.full_name }}</h5>
                 {% for number in doctor.profile_id.userphonenumber_set.all %}
-                    <p style="float: left; margin-left: 10px">{{ number.number }}</p>
+                    <p class="text-info" style=" margin-left: 10px;">{{ number.number }}</p>
                 {% endfor %}
             {% endfor %}
         </div>
