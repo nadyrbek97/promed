@@ -118,9 +118,9 @@
                             <li class="nav-divider">
                                 <a class="nav-link {% if url_name == 'visit-list-view' %}active{% endif %}" href="{% url 'visit-list-view' %}">Заключения</a>
                             </li>
-                            <li class="nav-divider">
-                                <a class="nav-link" href="#">Акции</a>
-                            </li>
+{#                            <li class="nav-divider">#}
+{#                                <a class="nav-link" href="#">Акции</a>#}
+{#                            </li>#}
                             </li>
                             {% endwith %}
                         </ul>
@@ -214,6 +214,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        {% empty %}
+                                                            <a type="button" class="badge badge-light mr-1">добавить номер телефона</a>
                                                             <!-- Delete Number Modal End -->
                                                         {% endfor %}
                                                         <a type="button" data-toggle="modal" data-target="#addUserNumberModal" href="#" class="badge badge-light mr-1 bg-success"> + </a>
