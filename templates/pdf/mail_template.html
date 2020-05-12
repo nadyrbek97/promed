@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+        .font-decor {
+            font-family: "Droid Sans Mono Slashed";
+        }
+
+        .text-red {
+            color: #dc3545;
+        }
+    </style>
+    <h2 class="text-red">Запрос на запись</h2>
+    <div>
+        <li>Пациент: <span class="bold font-decor">{{ patient_full_name }}</span></li>
+        <li>Номер телефона : <span class="bold">{{ patient_phone_number }}</span></li>
+        <li>Предпочтения : <span class="bold">{{ patient_preference }}</span></li>
+        <li>Время записи: <span class="bold">{{ date_time }}</span></li>
+        <li>Доктор: <span class="bold">{{ doctor_choice }}</span></li>
+    </div>
+</body>
+</html>

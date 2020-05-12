@@ -1,0 +1,314 @@
+<!doctype html>
+
+<!--- Loads --->
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
+
+    <link rel="stylesheet" href="{% static "/profile/libs/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/fonts/circular-std/style.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/fonts/fontawesome/css/fontawesome-all.css" %}">
+    <link rel="stylesheet" href="{% static "/profile/vendor/charts/morris-bundle/morris.css" %}">
+
+
+    {#    <script src={% static 'profile/libs/js/main-js.js' %}></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!-- jQuery UI !-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+    <!-- XDSoft DateTimePicker -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+    <!-- Input mask -->
+    <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+
+    <title>
+        {% block title %}
+        {{ med_center.title }} profile page
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper">
+        <!-- ============================================================== -->
+        <!-- navbar -->
+        <!-- ============================================================== -->
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <a class="navbar-brand" href={% url 'main-page' %}>{{ med_center.title }}</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <li class="nav-item pt-3">
+                            <h3 class="text-dark navbar-text mr-4 pt-2"><span class="text-brand">{{ user.username }}</span></h3>
+                        </li>
+                        <li class="nav-item navbar-text nav-divider">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#recordDeleteModel">
+                              Выйти
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="recordDeleteModel" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="recordDeleteModalLabel">Выход</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Вы действительно хотите выйти ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                        <form method="post" action="{% url 'logout-view' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Да</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal end -->
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+        <div class="nav-left-sidebar sidebar-dark">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Меню</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            {% with url_name=request.resolver_match.url_name %}
+                            <li class="nav-divider ">
+                                <h4 class="text-light font-bold">Меню</h4>
+                            </li>
+                            <li class="nav-divider">
+                                <a class="nav-link {% if url_name == 'profile-main-view' %}active{% endif %}" href="{% url 'profile-main-view' %}">Главная</a>
+                            </li>
+                            <li class="nav-divider">
+                                <a class="nav-link {% if url_name == 'visit-list-view' %}active{% endif %}" href="{% url 'visit-list-view' %}">Заключения</a>
+                            </li>
+                            <li class="nav-divider">
+                                <a class="nav-link {% if url_name == 'patient-list-view' %}active{% endif %}" href="{% url 'patient-list-view' %}">Пациенты</a>
+                            </li>
+                            <li class="nav-divider">
+                                <a class="nav-link {% if url_name == 'sample-list-view' %}active{% endif %}" href="{% url 'sample-list-view' %}">Шаблоны</a>
+                            </li>
+                            <li class="nav-divider">
+                                <a class="nav-link {% if url_name == 'doctor-detail-page-view' %}active{% endif %}" href="{% url 'doctor-detail-page-view' %}">Профиль</a>
+                            </li>
+                            {% endwith %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <br>
+            <div class="container-fluid">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="message-alert" data-dismiss="alert" class="alert alert-dismissible alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                            <div class="text-center">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <script>
+                      $("#message-alert").fadeTo(2000, 500).slideUp(500, function(){
+                            $("#message-alert").slideUp(500);
+                        });
+                </script>
+            </div>
+            <!-- ============================================================== -->
+            <!-- content  -->
+            <!-- ============================================================== -->
+            {% block content %}
+            <div class="container-fluid">
+                <aside class="page-aside">
+                    <div class="aside-content">
+                        <div class="aside-header">
+                            <button class="navbar-toggle" data-target=".aside-nav" data-toggle="collapse" type="button"><span class="icon"><i class="fas fa-caret-down"></i></span></button><span class="title">Шаблоны</span>
+                            <p class="description">Выберите готовый шаблон.</p>
+                        </div>
+                        <div class="aside-nav collapse">
+                            <ul class="nav">
+                                {% for sample in samples %}
+                                    <li><a href="#" id="sample_{{sample.id}}" onclick="insertText('conclusion-text', '{{ sample.description }}')"><span class="icon"><i class="fas fa-file-medical"></i></span>{{ sample.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            <script>
+                                function insertText(elemID, text)
+                                {
+                                    var elem = document.getElementById(elemID);
+                                    elem.innerHTML += text + "\n \n";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </aside>
+                <div class="main-content container-fluid mt-3">
+                    <form class="was-validated" action="{% url 'profile-main-view' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+{#                            <label for="inputText3" class="col-form-label">Ф.И.О пациента</label>#}
+                            {{ form.user_name_surname.label }}
+                            {{ form.user_name_surname }}
+{#                            <input id="inputText3" type="text" class="form-control" required>#}
+                            <div class="valid-feedback">Добавлено</div>
+                            <div class="invalid-feedback">Обязательно введите Ф.И.О пациента</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail">Email</label>
+                            {{ form.email }}
+{#                            <input id="inputEmail" type="email" placeholder="name@example.com" class="form-control">#}
+                            <div class="invalid-feedback">Формат 'email' не правильный</div>
+                            <div class="valid-feedback">email</div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.text.label }}
+                            {{ form.text }}
+{#                            <textarea id="conclusionPDF" class="form-control" id="exampleFormControlTextarea1" rows="20" required></textarea>#}
+                        </div>
+                        <div class="custom-file">
+{#                            <input type="file" class="custom-file-input" id="customFile" required>#}
+                            {{ form.image }}
+                            <button id="printButton" type="submit" class="btn btn-info form-group mt-2 mb-2" data-toggle="tooltip"
+                                    data-placement="top" title="Tooltip on top">
+                                Создать заключение
+                            </button>
+                            <div></div>
+                            <div class="form-group gallery" style="display: inline">
+                            <!-- Images Place -->
+                            </div>
+
+                            <label class="custom-file-label" for="customFile">Выберите снимок</label>
+                            <script>
+                                 $(document).ready(function(){
+                                      $("#image-input-file").change(function(){
+                                        console.log('image uploaded');
+                                        $(".gallery").empty(); //you can remove this code if you want previous user input
+                                        for(let i=0;i<this.files.length;++i){
+                                            let filereader = new FileReader();
+                                            let $img=jQuery.
+                                            parseHTML("<img src='' width='400px' height='380px' style='border: #cccccc solid 2px; display:inline;'>");
+                                            filereader.onload = function(){
+                                                $img[0].src=this.result;
+                                            };
+                                            filereader.readAsDataURL(this.files[i]);
+                                            $(".gallery").append($img);
+                                        }
+                                        $(".gallery").width(100).height(200);
+                                      });
+
+                                    });
+                                {#$(document).on('ready',()=>{#}
+                                {#    $("#images-input").on('change',function(){#}
+                                {#        console.log('Image uploaded')#}
+                                {#                $(".gallery").empty();//you can remove this code if you want previous user input#}
+                                {#                for(let i=0;i<this.files.length;++i){#}
+                                {#                    let filereader = new FileReader();#}
+                                {#                    let $img=jQuery.parseHTML("<img src=''>");#}
+                                {#                    filereader.onload = function(){#}
+                                {#                        $img[0].src=this.result;#}
+                                {#                    };#}
+                                {#                    filereader.readAsDataURL(this.files[i]);#}
+                                {#                    $(".gallery").append($img);#}
+                                {#                }#}
+                                {#    });#}
+
+                            </script>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            {% endblock %}
+            <!-- ============================================================== -->
+            <!-- end content  -->
+            <!-- ============================================================== -->
+{#            <!-- ============================================================== -->#}
+{#            <!-- footer -->#}
+{#            <!-- ============================================================== -->#}
+{#            <div class="footer">#}
+{#                <div class="container-fluid">#}
+{#                    <div class="row">#}
+{#                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">#}
+{#                             Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.#}
+{#                        </div>#}
+{#                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">#}
+{#                            <div class="text-md-right footer-links d-none d-sm-block">#}
+{#                                <a href="javascript: void(0);">About</a>#}
+{#                                <a href="javascript: void(0);">Support</a>#}
+{#                                <a href="javascript: void(0);">Contact Us</a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <!-- ============================================================== -->#}
+{#            <!-- end footer -->#}
+{#            <!-- ============================================================== -->#}
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- morris-chart js -->
+    <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
+    <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
+{#    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>#}
+{#    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>#}
+{#    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>#}
+
+
+</body>
+
+</html>

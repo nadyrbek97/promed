@@ -1,0 +1,264 @@
+{% extends 'profiles/profile-main-page.html' %}
+{% load static %}
+
+{% block title %}
+    Настройки
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid  dashboard-content">
+        <div class="card-header-title">
+            <h2 class="text-center text-primary font-bold">Профиль</h2>
+        </div>
+        <!-- ============================================================== -->
+        <!-- doctor profile  -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card influencer-profile-data">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12">
+                                <div class="text-center">
+                                    {% if doctor.image %}
+                                        <img src="{{ doctor.image.url }}" alt="User Avatar" class="rounded-circle user-avatar-xxl">
+                                    {% else %}
+                                        <img src="/media/doctors/doc_default.png" alt="User Avatar" class="rounded-circle user-avatar-xxl">
+                                    {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-xl-10 col-lg-8 col-md-8 col-sm-8 col-12">
+                                    <div class="user-avatar-info">
+                                        <div class="m-b-20">
+                                            <div class="user-avatar-name">
+                                                <h2 id="doctor-full-name-text" class="mb-1 text-dark font-bold">{{ doctor.profile_id.full_name }}</h2>
+                                            </div>
+                                        </div>
+                                        <!--  <div class="float-right"><a href="#" class="user-avatar-email text-secondary">www.henrybarbara.com</a></div> -->
+                                        <div class="user-avatar-address">
+                                            <p class="border-bottom pb-3">
+                                                <span class="d-xl-inline-block d-block mb-2 ml-xl-4 text-primary"><i class="fas fa-id-badge "></i> {{ doctor.department_id.title }}</span>
+                                                <span class="mb-2 ml-xl-4 d-xl-inline-block d-block"> </span>
+                                                {% if doctor.profile_id.gender == 0 %}
+                                                    <span class=" mb-2 d-xl-inline-block d-block ml-xl-4 text-primary"><i class="fas fa-male"></i> муж.</span>
+                                                {% else %}
+                                                    <span class=" mb-2 d-xl-inline-block d-block ml-xl-4 text-primary"><i class="fas fa-female"></i> жен.</span>
+                                                {% endif %}
+                                                <span class=" mb-2 d-xl-inline-block d-block ml-xl-4 text-primary"><i class="fas fa-clock"></i> опыт {{ doctor.experience }} лет </span>
+                                            </p>
+                                            <div class="mt-3">
+                                                {% for number in phone_numbers %}
+                                                    <a type="button" data-toggle="modal" data-target="#numberDeleteModal-{{ number.id }}" class="badge badge-light mr-1">{{ number.number }} <span aria-hidden="true">&times;</span></a>
+                                                    <!-- Delete Number Modal -->
+                                                    <div class="modal fade" id="numberDeleteModal-{{ number.id }}" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="recordDeleteModalLabel">Удалить номер телефона</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <label>Вы действительно хотите удалить номер {{ number.number }}?</label>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form action="{% url 'delete-phone-number-view' number.id %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit" class="btn btn-primary">Да</button>
+                                                                    </form>
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Delete Number Modal End -->
+                                                {% endfor %}
+                                                <a type="button" data-toggle="modal" data-target="#addUserNumberModal" href="#" class="badge badge-light mr-1 bg-success"> + </a>
+                                            </div>
+                                            <div class="mt-3">
+                                                <button id="doctor-profile-update-button" class="btn btn-info">Редактировать профиль</button>
+                                                <script>
+                                                    $(document).ready(function(){
+                                                      $("#doctor-profile-update-button").click(function(){
+                                                        $("#profileUpdateModal").modal("show");
+                                                      });
+                                                      $("#profileUpdateModal").on('show.bs.modal', function(){
+                                                            var full_name = $("#doctor-full-name-text").text();
+                                                            console.log("button clicked ");
+                                                            var modal = $(this);
+                                                            modal.find('#profile-full-name-input').val(full_name);
+                                                      });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <!-- Update Modal -->
+                                            <div class="modal fade" id="profileUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Редактировать профиль</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="{% url 'update-doctor-profile-view' %}" method="POST" enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                          <div class="form-group">
+                                                            <label for="profile-full-name-input" class="col-form-label">Ф.И.О</label>
+                                                              {{ profile_update_form.full_name }}
+                                                          </div>
+                                                          <div class="form-group">
+                                                              <label for="doctor-image-input" class="col-form-label">Фотография профиля</label>
+                                                              <div class="custom-file mb-3">
+                                                                {{ profile_update_form.image }}
+                                                                <label class="custom-file-label" for="customFile">Выберите снимок</label>
+                                                              </div>
+                                                          </div>
+
+                                                        <button type="submit" class="btn btn-info">Обновить</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                                    </form>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <!-- End Update Modal -->
+                                            <!-- Add number Modal -->
+                                            <div class="modal fade" id="addUserNumberModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Добавить номер телефона</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="{% url 'create-phone-number-view' %}" method="POST">
+                                                            {% csrf_token %}
+                                                          <div class="form-group">
+                                                            <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>
+                                                              {{ phone_form.number }}
+                                                          </div>
+                                                        <script>
+                                                            $('#add-doctor-number-input').inputmask("0999-999-999")
+                                                        </script>
+                                                        <button type="submit" class="btn btn-success">Добавить</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                                    </form>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <!-- End Add number Modal -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end doctor profile  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card-header text-center">
+                        <h3 class="text-dark font-bold">Количество заключений за 7 дней</h3>
+                    </div>
+                    <canvas id="my-chart" width="200" height="200" class="border"></canvas>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card-header text-center text-dark">
+                        <h3 class="text-dark font-bold">Заключения по услугам</h3>
+                    </div>
+                    <canvas id="my-chart-2" class="border" width="200" height="200"></canvas>
+                </div>
+                <script>
+                    var default_data = [];
+                    var labels = [];
+                    $.ajax({
+                       method: "GET",
+                       url: "{% url 'visits-for-last-week-data-view' %}",
+                       success: function (data) {
+                           labels = data.labels;
+                           default_data = data.default;
+                           setChartForLassWeek();
+                       },
+                        error: function (error_data) {
+                           console.log("error");
+                            console.log((error_data))
+                        }
+                    });
+                    function setChartForLassWeek() {
+                        var ctx = document.getElementById("my-chart");
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Пациенты',
+                                    data: default_data,
+                                    backgroundColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(74,129,255)',
+                                        'rgb(255,251,57)',
+                                        'rgb(73,255,138)',
+                                        'rgb(183,105,255)',
+                                        'rgb(255,163,30)',
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(74,129,255)',
+                                        'rgb(255,251,57)',
+                                        'rgb(73,255,138)',
+                                        'rgb(183,105,255)',
+                                        'rgb(255,163,30)',
+                                    ],
+                                }]
+                            },
+                        });
+                    }
+                    $.ajax({
+                       method: "GET",
+                       url: "{% url 'visits-by-service-data-view' %}",
+                       success: function (data) {
+                           labels = data.labels;
+                           default_data = data.default;
+                           setChartVisitsByService();
+                       },
+                        error: function (error_data) {
+                           console.log("error");
+                            console.log((error_data))
+                        }
+                    });
+                    function setChartVisitsByService() {
+                        var ctx2 = document.getElementById("my-chart-2");
+                        var myChart2 = new Chart(ctx2, {
+                            type: 'polarArea',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Пациенты',
+                                    data: default_data,
+                                    backgroundColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(74,129,255)',
+                                        'rgb(255,251,57)',
+                                        'rgb(73,255,138)',
+                                        'rgb(183,105,255)',
+                                        'rgb(255,163,30)',
+                                    ],
+                                }]
+                           },
+                        });
+                    }
+
+                </script>
+            </div>
+    </div>
+
+{% endblock %}
