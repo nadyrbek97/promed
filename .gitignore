@@ -1,7 +1,6 @@
 /.idea
 /media
 /venv
-/static
 /db.sqlite3
 /.env
 /locale/ru/LC_MESSAGES/django.mo
