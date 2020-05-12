@@ -33,7 +33,11 @@ class AppointmentForm(forms.Form):
         widget=forms.Select(
             attrs={
                 'placeholder': 'Выберите доктора',
-                'class': 'form-control'
+                'class': 'form-control',
+                'id': 'doctor-choice',
+                'style': 'select option {'
+                         'background: #cccccc'
+                         '}'
             }
         )
     )

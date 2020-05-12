@@ -3,11 +3,30 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from profiles.models import Doctor, User
-from visit.models import Visit
-from profiles.views import med_center
+from profiles.models import Doctor, User, Patient
+from visit.models import Visit, Review
+from profiles.views import med_center, patient_main_page
+from visit.forms import ReviewForm
+
+
+def create_review(request):
+    if request.method == "POST":
+        form = ReviewForm(request.POST or None)
+        if form.is_valid():
+            print(form.cleaned_data['doctor_choice'])
+            print(form.cleaned_data['text'])
+            patient = Patient.objects.get(profile_id=request.user.id)
+            Review.objects.create(
+                doctor_id=form.cleaned_data['doctor_choice'],
+                patient_id=patient,
+                text=form.cleaned_data['text'],
+            )
+            messages.success(request, 'Отзыв создан успешно!')
+            return redirect(patient_main_page)
+        else:
+            messages.error(request, 'Form is INVALID')
 
 
 @login_required(login_url="/profiles/login/")

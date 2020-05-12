@@ -1,3 +1,7 @@
+import json
+
+from django.http import HttpResponse
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -51,3 +55,9 @@ class VisitsByServiceData(APIView):
             "default": default_items
         }
         return Response(data)
+
+
+# def get_doctors_list(request):
+#     # id = request.GET.get('id','')
+#     result = list(User.objects.filter(role=0, is_superuser=False).values('id', 'full_name'))
+#     return HttpResponse(json.dumps(result), content_type="application/json")

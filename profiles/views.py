@@ -16,6 +16,7 @@ from profiles.models import User, Patient, Doctor, UserPhoneNumber
 
 from med_center.models import MedicalCenter
 from visit.models import Visit
+from visit.forms import ReviewForm
 
 from samples.models import Sample
 
@@ -288,9 +289,11 @@ def patient_main_page(request):
     user = request.user
     patient = Patient.objects.get(profile_id=user)
     phone_numbers = UserPhoneNumber.objects.filter(user=patient.profile_id)
+    review_form = ReviewForm()
     context = {
         'phone_form': phone_form,
         'profile_update_form': profile_update_form,
+        'review_form': review_form,
         'med_center': med_center,
         'patient': patient,
         'phone_numbers': phone_numbers

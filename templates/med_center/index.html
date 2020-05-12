@@ -293,17 +293,13 @@
         <div class="col-md-6 pr-md-5 pr-0 pt-md-5 pt-0 pb-md-5 pb-0">
           <h2 class="h1 mb-4 text-white">Отзывы Клиентов</h2>
           <ul class="probootstrap-blog-list list-unstyled">
-            <li>
-              <h2><span class="date">Ноябрь 22, 2019</span><p>Эркин эже, спасиибоо вам за выдавленные прыщи )))</p></h2>
-            </li>
-            <li>
-              <h2><span class="date">Октябрь 27, 2019</span><p>Ажара спасибоо вам ))) вы лучшая в своем деле !!!</p></h2>
-            </li>
-            <li>
-              <h2><span class="date">Октябрь 14, 2019</span><p>Жамшут эже лучший ветеринар ;) ... моя кошка счастлива!!!!.</p></h2>
-            </li>
+              {% for review in reviews %}
+                    <li>
+                      <h2><span class="date">{{ review.created }}</span><p>{{ review.text }}</p></h2>
+                    </li>
+              {% endfor %}
           </ul>
-          <p><a href="#" class="arrow-link">Посмотреть все  <i class="icon-chevron-right"></i></a></p>
+{#          <p><a href="#" class="arrow-link">Посмотреть все  <i class="icon-chevron-right"></i></a></p>#}
         </div>
         <div class="col-md-6 p-md-5 p-3 probootstrap-aside-stretch-right">
           <h2 class="h1 text-white" id="appointment-form" >ЗАПИСАТЬСЯ НА ПРИЕМ</h2>
@@ -322,6 +318,11 @@
                 {{ form.doctor_choice }}
 {#              <input type="choice" class="form-control" placeholder="Выберите Доктора">#}
             </div>
+              <style>
+                  #doctor-choice option{
+                      background: #00a86a;
+                  }
+              </style>
             <div class="form-group">
               <span class="icon"><i class="icon-calendar"></i></span>
                 {{ form.date_time }}

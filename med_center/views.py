@@ -13,6 +13,7 @@ from profiles.models import Doctor, User
 from profiles.views import med_center
 from department.models import Department
 from services.models import Service
+from visit.models import Review
 
 # med center
 med_center = MedicalCenter.objects.first()
@@ -108,6 +109,9 @@ def main_page_view(request):
     # doctors
     doctors = Doctor.objects.filter(profile_id__is_superuser=False)
 
+    # reviews
+    reviews = Review.objects.filter(is_approved=True).order_by('-created')[:4]
+
     # form
     form = AppointmentForm()
 
@@ -121,6 +125,7 @@ def main_page_view(request):
         "main_branch_number": main_branch_number.number,
         "user_role": user_role,
         "doctors": doctors,
+        "reviews": reviews,
         "form": form
     }
     return render(request, "med_center/index.html", context=context)

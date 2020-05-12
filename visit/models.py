@@ -36,3 +36,24 @@ class VisitImage(models.Model):
 
     def __str__(self):
         return f"visit image {self.uploaded_at}"
+
+
+class Review(models.Model):
+    is_approved = models.BooleanField(verbose_name=_('is_approved'), default=False)
+    patient_id = models.ForeignKey(Patient, verbose_name=_('Patient'),
+                                   on_delete=models.CASCADE,
+                                   related_name='reviews')
+    doctor_id = models.ForeignKey(Doctor, verbose_name=_('Doctor'),
+                                  on_delete=models.CASCADE,
+                                  related_name='reviews', null=True,
+                                  blank=True)
+    text = models.TextField(verbose_name=_('Text'))
+    created = models.DateTimeField(verbose_name=_('created'), auto_now_add=True)
+
+    class Meta:
+        ordering = ['created']
+        verbose_name = _("Review")
+        verbose_name_plural = _("Reviews")
+
+    def __str__(self):
+        return f"Отзыв от {self.patient_id.profile_id.full_name} в {self.created}"

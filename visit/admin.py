@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Visit
+from .models import Visit, Review, VisitImage
 from profiles.models import Doctor
 
 
@@ -23,21 +23,22 @@ class DoctorListFilter(admin.SimpleListFilter):
             return queryset.filter(doctor_id=self.value())
         return queryset
 
-    # def value(self):
-    #     value = super(DoctorListFilter, self).value()
-    #     if value is None:
-    #         if self.default_value is None:
-    #             all_doctor = Doctor.objects.order_by('profile_id__full_name').first()
-    #             value = None if all_doctor is None else all_doctor.profile_id.id
-    #             self.default_value = value
-    #         else:
-    #             value = self.default_value
-    #     return str(value)
+
+class VisitImageInline(admin.StackedInline):
+    model = VisitImage
+    extra = 1
 
 
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
+    inlines = [VisitImageInline, ]
     ordering = ['start_time']
     date_hierarchy = 'start_time'
     list_display = ['start_time', 'doctor', 'patient']
     list_filter = ('is_finished', DoctorListFilter, )
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    ordering = ['created']
+    list_display = ['created', 'is_approved', 'doctor_id', 'patient_id']
