@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="{% static "/profile/vendor/fonts/fontawesome/css/fontawesome-all.css" %}">
     <link rel="stylesheet" href="{% static "/profile/vendor/charts/morris-bundle/morris.css" %}">
 
-
     {#    <script src={% static 'profile/libs/js/main-js.js' %}></script>#}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -30,12 +29,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 
     <!-- XDSoft DateTimePicker -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 
- <!-- Input mask -->
+    <!-- Input mask -->
     <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
-
 
     <title>
         {% block title %}
@@ -200,7 +198,7 @@
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <h5 class="modal-title" id="recordDeleteModalLabel">Удалить номер телефона</h5>
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <button type="button" class="close ml-2" data-dismiss="modal" aria-label="Close">
                                                                                 <span aria-hidden="true">&times;</span>
                                                                             </button>
                                                                         </div>
@@ -225,7 +223,6 @@
                                                     </div>
                                                     <div class="mt-3">
                                                         <button id="doctor-profile-update-button" class="btn btn-info mb-2 mb-lg-0 mb-sm-2">Редактировать профиль</button>
-                                                        <button id="patient-appointment-button" class="btn btn-success">Записаться на прием</button>
                                                         <script>
                                                             $(document).ready(function(){
                                                               $("#doctor-profile-update-button").click(function(){
@@ -243,6 +240,63 @@
                                                               });
                                                             });
                                                         </script>
+                                                        <button id="patient-appointment-button" class="btn btn-success" data-toggle="modal" data-target="#appointmentModal">Записаться на прием</button>
+                                                        <!-- Appointment Modal -->
+                                                        <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Записаться на прием</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <form action="{% url 'create-appointment-view' %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                      <div class="form-group">
+                                                                            <label for="doctor-review-choice" class="col-form-label">Доктор</label>
+                                                                            {{ appointment_form.doctor_choice }}
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                            <label for="doctor-review-choice" class="col-form-label">Дата и Время записи</label>
+                                                                            {{ appointment_form.start_time }}
+                                                                      </div>
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $.datetimepicker.setLocale('ru');
+                                                                                $(function () {
+                                                                                    $("#start-time-input").datetimepicker(
+                                                                                        {
+                                                                                            format: 'd/m/Y H:i',
+                                                                                            allowTimes:[
+                                                                                                '08:00', '08:30',
+                                                                                                '09:00', '09:30',
+                                                                                                '10:00', '10:30',
+                                                                                                '11:00', '11:30',
+                                                                                                '12:00', '12:30',
+                                                                                                '13:00', '13:30',
+                                                                                                '14:00', '14:30',
+                                                                                                '15:00', '15:30',
+                                                                                                '16:00', '16:30',
+                                                                                                '17:00', '17:30'
+                                                                                             ]
+                                                                                        });
+                                                                                });
+                                                                            });
+                                                                        </script>
+                                                                      <div class="form-group">
+                                                                            <label for="review-text" class="col-form-label">Предпочтения</label>
+                                                                            {{ appointment_form.text }}
+                                                                      </div>
+                                                                    <button type="submit" class="btn btn-info">Записаться</button>
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                                                </form>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <!-- End Appointment Modal -->
                                                     </div>
                                                     <!-- Update Modal -->
                                                     <div class="modal fade" id="profileUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -272,7 +326,7 @@
 
 
                                                                 <button type="submit" class="btn btn-info">Обновить</button>
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                                                             </form>
                                                           </div>
                                                         </div>
@@ -315,7 +369,7 @@
                                 <div class="card-footer">
                                     <button id="create-review-button" data-toggle="modal" data-target="#createReview" class="btn btn-brand">Оставить отзыв</button>
                                 </div>
-                                <!-- Update Modal -->
+                                <!-- Review Modal -->
                                 <div class="modal fade" id="createReview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                   <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
@@ -336,14 +390,14 @@
                                                     <label for="review-text" class="col-form-label">Отзыв</label>
                                                     {{ review_form.text }}
                                               </div>
-                                            <button type="submit" class="btn btn-info">Обновить</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                            <button type="submit" class="btn btn-info">Отправить</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                                         </form>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                                <!-- End Update Modal -->
+                                <!-- End Review Modal -->
                             </div>
                         </div>
                     </div>

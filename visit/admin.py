@@ -32,9 +32,9 @@ class VisitImageInline(admin.StackedInline):
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
     inlines = [VisitImageInline, ]
-    ordering = ['start_time']
+    ordering = ['-start_time']
     date_hierarchy = 'start_time'
-    list_display = ['start_time', 'doctor', 'patient']
+    list_display = ['start_time', 'is_finished', 'doctor', 'patient']
     list_filter = ('is_finished', DoctorListFilter, )
 
 

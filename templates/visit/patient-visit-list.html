@@ -27,6 +27,9 @@
                                   <th class="th-sm">ФИО Пациента
 
                                   </th>
+                                    <th class="th-sm">Статус
+
+                                  </th>
                                   <th class="th-sm">Виды заключения
 
                                   </th>
@@ -39,6 +42,7 @@
                                 {% for visit in page_obj %}
                                     <tr>
                                         <td>{{ visit.patient.profile_id.full_name }}</td>
+                                        <td>{% if visit.is_finished %} завершен {% else %} запланирован {% endif %}</td>
                                         <td>{% for service in visit.service.all %}
                                             <p>{{ service.title }}</p>
                                             {% endfor %}

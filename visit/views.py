@@ -4,19 +4,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from profiles.models import Doctor, User, Patient
 from visit.models import Visit, Review
 from profiles.views import med_center, patient_main_page
-from visit.forms import ReviewForm
+from visit.forms import ReviewForm, AppointmentForm
 
 
 def create_review(request):
     if request.method == "POST":
         form = ReviewForm(request.POST or None)
         if form.is_valid():
-            print(form.cleaned_data['doctor_choice'])
-            print(form.cleaned_data['text'])
             patient = Patient.objects.get(profile_id=request.user.id)
             Review.objects.create(
                 doctor_id=form.cleaned_data['doctor_choice'],
@@ -24,6 +26,41 @@ def create_review(request):
                 text=form.cleaned_data['text'],
             )
             messages.success(request, 'Отзыв создан успешно!')
+            return redirect(patient_main_page)
+        else:
+            messages.error(request, 'Form is INVALID')
+
+
+def create_appointment(request):
+    if request.method == "POST":
+        form = AppointmentForm(request.POST or None)
+        if form.is_valid():
+            patient = Patient.objects.get(profile_id=request.user.id)
+            patient_phone_number = patient.profile_id.userphonenumber_set.all().first().number
+            Visit.objects.create(
+                patient_id=patient.profile_id.id,
+                doctor_id=form.cleaned_data['doctor_choice'].profile_id.id,
+                start_time=form.cleaned_data['start_time'],
+                preference=form.cleaned_data['text']
+            )
+            # Email Sent
+            print("Email sent to the DOCTOR and ADMIN")
+            admin_user_email = User.objects.get(username='admin').email
+            mail_context = {
+                'patient_full_name': patient.profile_id.full_name,
+                'patient_phone_number': patient_phone_number,
+                'date_time': form.cleaned_data['start_time'],
+                'patient_preference': form.cleaned_data['text'],
+                'doctor_choice': form.cleaned_data['doctor_choice'],
+            }
+            html_message = render_to_string('pdf/mail_template.html', context=mail_context)
+            plain_text_message = strip_tags(html_message)
+
+            send_mail('Test message', plain_text_message,
+                      settings.EMAIL_HOST_USER, [admin_user_email, form.cleaned_data['doctor_choice'].profile_id.email],
+                      html_message=html_message)
+            # success message
+            messages.success(request, 'Запись прошла успешно!')
             return redirect(patient_main_page)
         else:
             messages.error(request, 'Form is INVALID')
@@ -39,7 +76,7 @@ def user_visit_list(request):
     if user.role == 0:
         visits = Visit.objects.filter(doctor__profile_id=user_id)
     elif user.role == 1:
-        visits = Visit.objects.filter(patient__profile_id=user_id)
+        visits = Visit.objects.filter(patient__profile_id=user_id).order_by('-start_time')
     paginator = Paginator(visits, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

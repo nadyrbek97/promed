@@ -16,7 +16,7 @@ from profiles.models import User, Patient, Doctor, UserPhoneNumber
 
 from med_center.models import MedicalCenter
 from visit.models import Visit
-from visit.forms import ReviewForm
+from visit.forms import ReviewForm, AppointmentForm
 
 from samples.models import Sample
 
@@ -286,6 +286,7 @@ def profile_phone_number_delete(request, phone_id):
 def patient_main_page(request):
     phone_form = UserAddPhoneNumberForm()
     profile_update_form = PatientProfileUpdateForm()
+    appointment_form = AppointmentForm()
     user = request.user
     patient = Patient.objects.get(profile_id=user)
     phone_numbers = UserPhoneNumber.objects.filter(user=patient.profile_id)
@@ -293,6 +294,7 @@ def patient_main_page(request):
     context = {
         'phone_form': phone_form,
         'profile_update_form': profile_update_form,
+        'appointment_form': appointment_form,
         'review_form': review_form,
         'med_center': med_center,
         'patient': patient,

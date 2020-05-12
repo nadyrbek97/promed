@@ -8,15 +8,18 @@ from services.models import Service
 
 class Visit(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    start_time = models.DateTimeField()
-    is_finished = models.BooleanField(default=False)
+    start_time = models.DateTimeField(verbose_name=_("Start date"))
+    is_finished = models.BooleanField(verbose_name=_("finished"), default=False)
 
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE,
                                related_name="visits")
-    service = models.ManyToManyField(Service,
+    service = models.ManyToManyField(Service, verbose_name=_("Doctor"),
+                                     blank=True,
                                      related_name="visits")
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,
+    patient = models.ForeignKey(Patient, verbose_name=_("Patient"),
+                                on_delete=models.CASCADE,
                                 related_name="visits")
+    preference = models.TextField(verbose_name=_("Preference"), null=True, blank=True)
 
     class Meta:
         ordering = ['created']
