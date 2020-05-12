@@ -96,7 +96,7 @@
           <div class="float-md-right float-none">
           <div class="probootstrap-contact-phone d-flex align-items-top mb-3 float-left">
             <span class="icon mr-2"><i class="icon-phone"></i></span>
-            <span class="probootstrap-text"> {{ main_branch_number }} <small class="d-block"><a href="#appointment-form" class="arrow-link">Записаться <i class="icon-chevron-right"></i></a></small></span>
+            <span class="probootstrap-text"> {{ main_branch_number }} <small class="d-block"><a href="{% url 'main-page' %}#appointment-form" class="arrow-link">Записаться <i class="icon-chevron-right"></i></a></small></span>
           </div>
           </div>
         </div>
@@ -295,7 +295,10 @@
           <ul class="probootstrap-blog-list list-unstyled">
               {% for review in reviews %}
                     <li>
-                      <h2><span class="date">{{ review.created }}</span><p>{{ review.text }}</p></h2>
+                      <h2>
+                          <span class="date">{{ review.created }}</span>
+                          <span class="date">{{ review.patient_id.profile_id.full_name }}</span>
+                          <p>{{ review.text }}</p></h2>
                     </li>
               {% endfor %}
           </ul>
