@@ -34,3 +34,4 @@ sqlparse==0.3.0
 urllib3==1.25.8
 webencodings==0.5.1
 xhtml2pdf==0.2.4
+
