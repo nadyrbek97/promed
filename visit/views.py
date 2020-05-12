@@ -77,7 +77,7 @@ def user_visit_list(request):
         visits = Visit.objects.filter(doctor__profile_id=user_id)
     elif user.role == 1:
         visits = Visit.objects.filter(patient__profile_id=user_id).order_by('-start_time')
-    paginator = Paginator(visits, 5)
+    paginator = Paginator(visits, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
