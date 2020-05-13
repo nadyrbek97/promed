@@ -1,7 +1,9 @@
-from datetime import datetime
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
@@ -12,7 +14,48 @@ from django.utils.html import strip_tags
 from profiles.models import Doctor, User, Patient
 from visit.models import Visit, Review
 from profiles.views import med_center, patient_main_page
-from visit.forms import ReviewForm, AppointmentForm
+from visit.forms import (ReviewForm, AppointmentForm,
+                         ConclusionForm)
+from visit.utils import render_to_pdf
+
+
+def create_conclusion(request):
+    if request.method == "POST":
+        form = ConclusionForm(data=request.POST)
+        files = request.FILES.getlist('image')
+        url_list = []
+        if form.is_valid():
+            print("is valid")
+            print(files)
+            # get doctor from request.user
+            user = request.user
+            # get image from request
+            for image in files:
+                print(image.name)
+                print(image.size)
+                fs = FileSystemStorage()
+                image_name = fs.save(image.name, image)
+                url_list.append(fs.url(image_name))
+                print(url_list)
+                # ---save image finished----
+
+            doctor_name_surname = User.objects.get(id=user.id).full_name
+            # get data from form
+            patient_name_surname = form.cleaned_data["user_name_surname"].full_name
+            text = form.cleaned_data["text"]
+
+            # ---------pass data for pfd ------
+            data = {
+                'med_center': med_center.title,
+                'doctor_name': doctor_name_surname,
+                'patient_name': patient_name_surname,
+                'text': text.split("\n"),
+                'images': url_list,
+                'today': datetime.date.today(),
+            }
+            pdf = render_to_pdf('pdf/conclusion.html', data)
+            return HttpResponse(pdf, content_type='application/pdf')
+        print(form.errors)
 
 
 def create_review(request):

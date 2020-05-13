@@ -170,7 +170,7 @@
             <!-- ============================================================== -->
             {% block content %}
             <div class="container-fluid">
-                <aside class="page-aside">
+                <aside class="page-aside" style="z-index: 20">
                     <div class="aside-content">
                         <div class="aside-header">
                             <button class="navbar-toggle" data-target=".aside-nav" data-toggle="collapse" type="button"><span class="icon"><i class="fas fa-caret-down"></i></span></button><span class="title">Шаблоны</span>
@@ -259,7 +259,7 @@
                         </div>
                         <!-- End Create Patient Modal -->
                     </div>
-                    <form class="was-validated" action="{% url 'profile-main-view' %}" method="post" enctype="multipart/form-data">
+                    <form class="was-validated" action="{% url 'create-conclusion-view' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
 {#                            <label for="inputText3" class="col-form-label">Ф.И.О пациента</label>#}

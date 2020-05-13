@@ -1,6 +1,61 @@
 from django import forms
+from django.forms import ValidationError
 
-from profiles.models import Doctor
+from django_select2 import forms as s2_forms
+
+from profiles.models import Doctor, User
+
+
+class ConclusionForm(forms.Form):
+    user_name_surname = forms.ModelChoiceField(
+        queryset=User.objects.filter(role=1),
+        label="Ф.И.О пациента",
+        widget=s2_forms.ModelSelect2Widget(
+            queryset=User.objects.filter(role=1),
+            search_fields=["full_name__icontains", 'username__icontains'],
+            attrs={'data-placeholder': 'ф.и.о пациента ...', 'class': 'form-control'}
+        )
+    )
+    text = forms.CharField(
+        label="Текст заключения",
+        widget=forms.Textarea(
+            attrs={
+                'width': "100%", 'cols': "100", 'rows': "20",
+                'placeholder': 'Текст заключения',
+                'class': 'form-control',
+                'id': 'conclusion-text'}))
+    image = forms.FileField(
+        required=False,
+        label="Выберите снимок",
+        widget=forms.FileInput(
+            attrs={
+                'name': 'image',
+                'placeholder': 'Выберите снимок',
+                'class': 'custom-file-input',
+                'multiple': 'true',
+                'id': 'image-input-file'
+            }))
+
+    # def clean_user_name_surname(self):
+    #     user_name_surname = self.cleaned_data['user_name_surname']
+    #     if len(user_name_surname) < 5:
+    #         raise ValidationError("слишком коротко")
+    #     return user_name_surname
+    #
+    # def clean_text(self):
+    #     text = self.cleaned_data['text']
+    #     if len(text) < 3:
+    #         raise ValidationError("слишком коротко")
+    #
+    #     return text
+
+    # def clean_image(self):
+    #     image = self.cleaned_data['image']
+    #     if not image:
+    #         raise ValidationError("вставте снимок")
+    #     return image
+
+
 
 
 class ReviewForm(forms.Form):
