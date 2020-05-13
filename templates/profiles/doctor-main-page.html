@@ -36,6 +36,11 @@
     <!-- Input mask -->
     <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
+    <!-- Select2 jquery -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+{#    {{ form.media.render_css }}#}
 
     <title>
         {% block title %}
@@ -174,7 +179,7 @@
                         <div class="aside-nav collapse">
                             <ul class="nav">
                                 {% for sample in samples %}
-                                    <li><a href="#" id="sample_{{sample.id}}" onclick="insertText('conclusion-text', '{{ sample.description }}')"><span class="icon"><i class="fas fa-file-medical"></i></span>{{ sample.title }}</a></li>
+                                    <li><a id="sample_{{sample.id}}" onclick="insertText('conclusion-text', '{{ sample.description }}')"><span class="icon"><i class="fas fa-file-medical"></i></span>{{ sample.title }}</a></li>
                                 {% endfor %}
                             </ul>
                             <script>
@@ -258,19 +263,19 @@
                         {% csrf_token %}
                         <div class="form-group">
 {#                            <label for="inputText3" class="col-form-label">Ф.И.О пациента</label>#}
+                            <style>
+                                .django-select2 {
+                                    width: 100%;
+                                }
+                            </style>
                             {{ form.user_name_surname.label }}
                             {{ form.user_name_surname }}
+
 {#                            <input id="inputText3" type="text" class="form-control" required>#}
                             <div class="valid-feedback">Добавлено</div>
                             <div class="invalid-feedback">Обязательно введите Ф.И.О пациента</div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputEmail">Email</label>
-                            {{ form.email }}
-{#                            <input id="inputEmail" type="email" placeholder="name@example.com" class="form-control">#}
-                            <div class="invalid-feedback">Формат 'email' не правильный</div>
-                            <div class="valid-feedback">email</div>
-                        </div>
+
                         <div class="form-group">
                             {{ form.text.label }}
                             {{ form.text }}
@@ -367,13 +372,13 @@
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
+    {{ form.media.render }}
     <!-- morris-chart js -->
     <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
     <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
 {#    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>#}
 {#    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>#}
 {#    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>#}
-
 
 </body>
 

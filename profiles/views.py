@@ -133,12 +133,10 @@ def profile_main_view(request):
 
             doctor_name_surname = User.objects.get(id=user.id).full_name
             # get data from form
-            patient_name_surname = form.cleaned_data["user_name_surname"]
-            email = form.cleaned_data["email"]
+            patient_name_surname = form.cleaned_data["user_name_surname"].full_name
             text = form.cleaned_data["text"]
 
             # ---------pass data for pfd ------
-
             data = {
                 'med_center': med_center.title,
                 'doctor_name': doctor_name_surname,

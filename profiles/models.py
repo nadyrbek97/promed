@@ -23,7 +23,7 @@ class User(AbstractUser):
         ordering = ['-created']
 
     def __str__(self):
-        return f"{self.role}: {self.full_name}"
+        return f"{self.full_name} {self.birth_date}"
 
 
 class Doctor(models.Model):

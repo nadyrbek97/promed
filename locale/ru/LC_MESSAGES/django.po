@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-12 13:17+0000\n"
+"POT-Creation-Date: 2020-05-13 14:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,19 +68,19 @@ msgstr "Фотографии Мед.Центра"
 msgid "profiles"
 msgstr "профайлы"
 
-#: profiles/models.py:41 visit/models.py:46
+#: profiles/models.py:44 visit/models.py:16 visit/models.py:49
 msgid "Doctor"
 msgstr "Доктор"
 
-#: profiles/models.py:42
+#: profiles/models.py:45
 msgid "Doctors"
 msgstr "Доктора"
 
-#: profiles/models.py:58 visit/models.py:43
+#: profiles/models.py:61 visit/models.py:19 visit/models.py:46
 msgid "Patient"
 msgstr "Пациент"
 
-#: profiles/models.py:59
+#: profiles/models.py:62
 msgid "Patients"
 msgstr "Пациенты"
 
@@ -588,7 +588,7 @@ msgstr ""
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2032
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2032
 #: venv/lib64/python3.7/site-packages/django/db/models/fields/__init__.py:2028
-#: visit/models.py:50
+#: visit/models.py:53
 msgid "Text"
 msgstr "Текст"
 
@@ -1791,27 +1791,39 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: visit/models.py:23
+#: visit/models.py:11
+msgid "Start date"
+msgstr ""
+
+#: visit/models.py:12
+msgid "finished"
+msgstr ""
+
+#: visit/models.py:22
+msgid "Preference"
+msgstr ""
+
+#: visit/models.py:26
 msgid "Visit"
 msgstr "Посещение"
 
-#: visit/models.py:24
+#: visit/models.py:27
 msgid "Visits"
 msgstr "Посещения"
 
-#: visit/models.py:42
+#: visit/models.py:45
 msgid "is_approved"
 msgstr "подтвержен"
 
-#: visit/models.py:51
+#: visit/models.py:54
 msgid "created"
 msgstr "дата создания"
 
-#: visit/models.py:55
+#: visit/models.py:58
 msgid "Review"
 msgstr "Отзыв"
 
-#: visit/models.py:56
+#: visit/models.py:59
 msgid "Reviews"
 msgstr "Отзывы"
 
