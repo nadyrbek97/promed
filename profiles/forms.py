@@ -5,6 +5,62 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from profiles.models import User, UserPhoneNumber
 
 
+class PatientCreateForm(forms.Form):
+    full_name = forms.CharField(
+        required=True,
+        label="Ф.И.О ***",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-full-name-input'
+            }
+        )
+    )
+    phone_number = forms.CharField(
+        required=False,
+        label="Номер телефона",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-phone-number-input'
+            }
+        )
+    )
+    birth_date = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        required=True,
+        label="Дата рождения ***",
+        widget=forms.DateInput(
+            format='%d/%m/%Y',
+            attrs={
+                'placeholder': 'выберите дату рождения',
+                'class': 'form-control date',
+                'id': 'birth-date-input'
+            }
+        )
+    )
+    address = forms.CharField(
+        required=False,
+        label="Адресс",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-address-input'
+            }
+        )
+    )
+    email = forms.EmailField(
+        required=False,
+        label="Email",
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'name@example.com',
+                'id': 'patient-email-input',
+                'class': 'form-control'}
+        )
+    )
+
+
 class PatientProfileUpdateForm(forms.Form):
     full_name = forms.CharField(
         label="Ф.И.О",
@@ -130,7 +186,7 @@ class ConclusionForm(forms.Form):
 
     def clean_text(self):
         text = self.cleaned_data['text']
-        if len(text) < 10:
+        if len(text) < 3:
             raise ValidationError("слишком коротко")
 
         return text

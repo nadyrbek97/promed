@@ -89,8 +89,8 @@ class MyUserAdmin(UserAdmin):
             'fields': ('username', 'role', 'password1', 'password2')}
         ),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('full_name', 'username')
+    ordering = ('-created',)
     filter_horizontal = ()
 
 

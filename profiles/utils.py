@@ -1,4 +1,5 @@
 import os
+import random
 
 from django.conf import settings
 from io import BytesIO
@@ -55,3 +56,7 @@ def fetch_resources(uri, rel):
     else:
         path = None
     return path
+
+
+def generate_password():
+    return random.randint(9999, 99999)
