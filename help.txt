@@ -1,0 +1,2 @@
+python3 manage.py makemessages -l ru
+python3 manage.py compilemessages -l ru
