@@ -36,6 +36,11 @@
     <!-- Input mask -->
     <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
+    <!-- Select2 jquery -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+{#    {{ form.media.render_css }}#}
 
     <title>
         {% block title %}
@@ -144,7 +149,7 @@
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <br>
-            <div class="container-fluid">
+            <div class="container-fluid" style="z-index: 99">
                 {% if messages %}
                     {% for message in messages %}
                         <div id="message-alert" data-dismiss="alert" class="alert alert-dismissible alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
@@ -165,7 +170,7 @@
             <!-- ============================================================== -->
             {% block content %}
             <div class="container-fluid">
-                <aside class="page-aside">
+                <aside class="page-aside" style="z-index: 20">
                     <div class="aside-content">
                         <div class="aside-header">
                             <button class="navbar-toggle" data-target=".aside-nav" data-toggle="collapse" type="button"><span class="icon"><i class="fas fa-caret-down"></i></span></button><span class="title">Шаблоны</span>
@@ -174,7 +179,7 @@
                         <div class="aside-nav collapse">
                             <ul class="nav">
                                 {% for sample in samples %}
-                                    <li><a href="#" id="sample_{{sample.id}}" onclick="insertText('conclusion-text', '{{ sample.description }}')"><span class="icon"><i class="fas fa-file-medical"></i></span>{{ sample.title }}</a></li>
+                                    <li><a id="sample_{{sample.id}}" onclick="insertText('conclusion-text', '{{ sample.description }}')"><span class="icon"><i class="fas fa-file-medical"></i></span>{{ sample.title }}</a></li>
                                 {% endfor %}
                             </ul>
                             <script>
@@ -188,23 +193,89 @@
                     </div>
                 </aside>
                 <div class="main-content container-fluid mt-3">
-                    <form class="was-validated" action="{% url 'profile-main-view' %}" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-body">
+                            <button class="btn btn-success btn-block" data-toggle="modal" data-target="#createPatientModal"> Создать пациента </button>
+                        </div>
+                        <!-- Create Patient Modal -->
+                        <div class="modal fade" id="createPatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Создать пациента (***) обязательные поля</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="{% url 'create-patient-view' %}" method="POST">
+                                        {% csrf_token %}
+                                      <div class="form-group">
+{#                                        <label for="patient-full-name-input" class="col-form-label">Ф.И.О</label>#}
+                                          {{ create_patient_form.full_name.label }}
+                                          {{ create_patient_form.full_name }}
+                                      </div>
+                                    <div class="form-group">
+{#                                        <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>#}
+                                          {{ create_patient_form.phone_number.label }}
+                                          {{ create_patient_form.phone_number }}
+                                    </div>
+                                    <script>
+                                        $('#patient-phone-number-input').inputmask("0999-999-999")
+                                    </script>
+                                    <div class="form-group">
+{#                                            <label for="doctor-review-choice" class="col-form-label">Дата рождения</label>#}
+                                            {{ create_patient_form.birth_date.label }}
+                                            {{ create_patient_form.birth_date }}
+                                    </div>
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                $.datetimepicker.setLocale('ru');
+                                                $(function () {
+                                                    $("#birth-date-input").datetimepicker(
+                                                        {
+                                                            format: 'd/m/Y',
+                                                            timepicker: false,
+                                                        });
+                                                });
+                                            });
+                                        </script>
+                                      <div class="form-group">
+{#                                            <label for="profile-address-input" class="col-form-label">Адресс</label>#}
+                                          {{ create_patient_form.address.label }}
+                                          {{ create_patient_form.address }}
+                                      </div>
+                                      <div class="form-group">
+{#                                            <label for="profile-address-input" class="col-form-label">Email</label>#}
+                                          {{ create_patient_form.email.label }}
+                                          {{ create_patient_form.email }}
+                                      </div>
+                                    <button type="submit" class="btn btn-success">Создать пациента</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Create Patient Modal -->
+                    </div>
+                    <form class="was-validated" action="{% url 'create-conclusion-view' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
 {#                            <label for="inputText3" class="col-form-label">Ф.И.О пациента</label>#}
+                            <style>
+                                .django-select2 {
+                                    width: 100%;
+                                }
+                            </style>
                             {{ form.user_name_surname.label }}
                             {{ form.user_name_surname }}
+
 {#                            <input id="inputText3" type="text" class="form-control" required>#}
                             <div class="valid-feedback">Добавлено</div>
                             <div class="invalid-feedback">Обязательно введите Ф.И.О пациента</div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputEmail">Email</label>
-                            {{ form.email }}
-{#                            <input id="inputEmail" type="email" placeholder="name@example.com" class="form-control">#}
-                            <div class="invalid-feedback">Формат 'email' не правильный</div>
-                            <div class="valid-feedback">email</div>
-                        </div>
+
                         <div class="form-group">
                             {{ form.text.label }}
                             {{ form.text }}
@@ -301,13 +372,13 @@
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
+    {{ form.media.render }}
     <!-- morris-chart js -->
     <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
     <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
 {#    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>#}
 {#    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>#}
 {#    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>#}
-
 
 </body>
 

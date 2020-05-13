@@ -19,8 +19,11 @@ class User(AbstractUser):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created']
+
     def __str__(self):
-        return f"{self.role}: {self.full_name}"
+        return f"{self.full_name} {self.birth_date}"
 
 
 class Doctor(models.Model):
@@ -51,8 +54,13 @@ class UserPhoneNumber(models.Model):
 
 
 class Patient(models.Model):
-    profile_id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    address = models.CharField(null=True, blank=True, max_length=255)
+    profile_id = models.OneToOneField(User, on_delete=models.CASCADE,
+                                      primary_key=True,
+                                      verbose_name=_("Profile"))
+    address = models.CharField(null=True, blank=True,
+                               max_length=255, verbose_name=_("Address"))
+    first_password = models.CharField(null=True, blank=True,
+                                      max_length=255, verbose_name=_("Initial Password"))
 
     class Meta:
         verbose_name = _("Patient")

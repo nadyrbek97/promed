@@ -32,6 +32,7 @@ class VisitImageInline(admin.StackedInline):
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
     inlines = [VisitImageInline, ]
+    list_per_page = 15
     ordering = ['-start_time']
     date_hierarchy = 'start_time'
     list_display = ['start_time', 'is_finished', 'doctor', 'patient']

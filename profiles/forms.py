@@ -1,8 +1,64 @@
 from django import forms
-from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
+
 from profiles.models import User, UserPhoneNumber
+
+
+class PatientCreateForm(forms.Form):
+    full_name = forms.CharField(
+        required=True,
+        label="Ф.И.О ***",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-full-name-input'
+            }
+        )
+    )
+    phone_number = forms.CharField(
+        required=False,
+        label="Номер телефона",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-phone-number-input'
+            }
+        )
+    )
+    birth_date = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        required=True,
+        label="Дата рождения ***",
+        widget=forms.DateInput(
+            format='%d/%m/%Y',
+            attrs={
+                'placeholder': 'выберите дату рождения',
+                'class': 'form-control date',
+                'id': 'birth-date-input'
+            }
+        )
+    )
+    address = forms.CharField(
+        required=False,
+        label="Адресс",
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'patient-address-input'
+            }
+        )
+    )
+    email = forms.EmailField(
+        required=False,
+        label="Email",
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'name@example.com',
+                'id': 'patient-email-input',
+                'class': 'form-control'}
+        )
+    )
 
 
 class PatientProfileUpdateForm(forms.Form):
@@ -86,58 +142,4 @@ class UserLoginForm(AuthenticationForm):
                    'class': 'form-control form-control-lg',
                    'placeholder': 'Пароль'}),
     )
-
-
-class ConclusionForm(forms.Form):
-    user_name_surname = forms.CharField(
-        label="Ф.И.О пациента",
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Ф.И.О',
-                'class': "form-control", }))
-    email = forms.EmailField(
-        required=False,
-        label="Email",
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': 'name@example.com',
-                'class': 'form-control'}))
-    text = forms.CharField(
-        label="Текст заключения",
-        widget=forms.Textarea(
-            attrs={
-                'width': "100%", 'cols': "100", 'rows': "20",
-                'placeholder': 'Текст заключения',
-                'class': 'form-control',
-                'id': 'conclusion-text'}))
-    image = forms.FileField(
-        required=False,
-        label="Выберите снимок",
-        widget=forms.FileInput(
-            attrs={
-                'name': 'image',
-                'placeholder': 'Выберите снимок',
-                'class': 'custom-file-input',
-                'multiple': 'true',
-                'id': 'image-input-file'
-            }))
-
-    def clean_user_name_surname(self):
-        user_name_surname = self.cleaned_data['user_name_surname']
-        if len(user_name_surname) < 5:
-            raise ValidationError("слишком коротко")
-        return user_name_surname
-
-    def clean_text(self):
-        text = self.cleaned_data['text']
-        if len(text) < 10:
-            raise ValidationError("слишком коротко")
-
-        return text
-
-    # def clean_image(self):
-    #     image = self.cleaned_data['image']
-    #     if not image:
-    #         raise ValidationError("вставте снимок")
-    #     return image
 

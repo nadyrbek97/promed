@@ -29,6 +29,8 @@ urlpatterns = [
     path('about/', about_page, name='about-page'),
     path('departments/', departments_page, name='departments-page'),
     path('contacts/', contacts_page, name='contacts-page'),
+    # django select2
+    path('select2/', include('django_select2.urls'), name='select2-view'),
     # admin panel
     path('admin/', admin.site.urls),
     # applications' urls

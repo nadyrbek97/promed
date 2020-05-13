@@ -1,4 +1,3 @@
-import datetime
 import json
 
 from django.shortcuts import render, redirect
@@ -7,20 +6,21 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 
-from profiles.forms import UserLoginForm, ConclusionForm, UserAddPhoneNumberForm, DoctorProfileUpdateForm
-from profiles.forms import PatientProfileUpdateForm
+from profiles.forms import ( UserLoginForm, UserAddPhoneNumberForm,
+                             DoctorProfileUpdateForm, PatientProfileUpdateForm,
+                             PatientCreateForm, )
+
 from profiles.models import User, Patient, Doctor, UserPhoneNumber
+from visit.utils import generate_password
 
 from med_center.models import MedicalCenter
 from visit.models import Visit
-from visit.forms import ReviewForm, AppointmentForm
+from visit.forms import (ReviewForm, AppointmentForm,
+                         ConclusionForm)
 
 from samples.models import Sample
-
-from .utils import render_to_pdf
 
 # Medical Center
 med_center = MedicalCenter.objects.first()
@@ -58,65 +58,60 @@ def logout(request):
         return redirect('main-page')
 
 
+def create_patient(request):
+
+    if request.method == "POST":
+        try:
+            form = PatientCreateForm(request.POST or None)
+            if form.is_valid():
+                # print(form.cleaned_data['full_name'])
+                # print(form.cleaned_data['phone_number'])
+                # print(form.cleaned_data['birth_date'])
+                # print(form.cleaned_data['address'])
+                # print(form.cleaned_data['email'])
+                # # ----------CREATE PATIENT --------
+                amount_of_users = User.objects.all().count() + 1000
+                patient_username = 'patient_' + str(amount_of_users)
+                password = "patient" + str(generate_password())
+                print(patient_username)
+                print(password)
+                created_user = User.objects.create_user(
+                    full_name=form.cleaned_data['full_name'],
+                    birth_date=form.cleaned_data['birth_date'],
+                    email=form.cleaned_data['email'],
+                    username=patient_username,
+                    password=password,
+                    role=1
+                )
+                patient = Patient(
+                    profile_id=created_user,
+                    address=form.cleaned_data['address'],
+                    first_password=password
+                )
+                patient.save()
+                # -------- Phone Number -----------
+                UserPhoneNumber.objects.create(
+                    user=created_user,
+                    number=form.cleaned_data['phone_number']
+                )
+                # ---------------------------------
+                messages.success(request, 'Пациент создан успешно!!!')
+                return redirect(profile_main_view)
+            else:
+                messages.error(request, "Неправильно заполнены поля, проверьте формат даты рожднения")
+                return redirect(profile_main_view)
+        except:
+            messages.error(request, "Произошла ошибка на стороне сервера 500 :(")
+            return redirect(profile_main_view)
+
+
 @login_required(login_url="/profiles/login/")
 def profile_main_view(request):
     user = request.user
 
-    form = ConclusionForm(request.POST)
+    form = ConclusionForm()
+    create_patient_form = PatientCreateForm()
 
-    if request.method == "POST":
-        form = ConclusionForm(data=request.POST)
-        files = request.FILES.getlist('image')
-        url_list = []
-        if form.is_valid():
-            print("is valid")
-            print(files)
-            # get doctor from request.user
-            user = request.user
-            # get image from request
-            for image in files:
-                print(image.name)
-                print(image.size)
-                fs = FileSystemStorage()
-                image_name = fs.save(image.name, image)
-                url_list.append(fs.url(image_name))
-                print(url_list)
-                # ---save image finished----
-
-            doctor_name_surname = User.objects.get(id=user.id).full_name
-            # get data from form
-            patient_name_surname = form.cleaned_data["user_name_surname"]
-            email = form.cleaned_data["email"]
-            text = form.cleaned_data["text"]
-
-            # # ----------CREATE PATIENT --------
-            # amount_of_users = User.objects.all().count() + 1
-            # patient_username = 'patient_' + str(amount_of_users)
-            # default_password = 'patient123'
-            # created_user = User.objects.create_user(
-            #     username=patient_username,
-            #     password=default_password,
-            #     first_name=patient_name_surname,
-            #     last_name=patient_name_surname,
-            #     role=1
-            # )
-            # Patient.objects.create(profile_id=created_user)
-            # print(patient_username)
-            # print(amount_of_users)
-            # ---------------------------------
-            # ---------pass data for pfd ------
-
-            data = {
-                'med_center': med_center.title,
-                'doctor_name': doctor_name_surname,
-                'patient_name': patient_name_surname,
-                'text': text.split("\n"),
-                'images': url_list,
-                'today': datetime.date.today(),
-            }
-            pdf = render_to_pdf('pdf/conclusion.html', data)
-            return HttpResponse(pdf, content_type='application/pdf')
-        print(form.errors)
     # samples
     if user.doctor:
         department_id = user.doctor.department_id
@@ -127,10 +122,11 @@ def profile_main_view(request):
     context = {
         "med_center": med_center,
         "samples": samples,
+        "create_patient_form": create_patient_form,
         "form": form
     }
 
-    return render(request, "profiles/profile-main-page.html", context=context)
+    return render(request, "profiles/doctor-main-page.html", context=context)
 
 
 @login_required(login_url="/profiles/login/")

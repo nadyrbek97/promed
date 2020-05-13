@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'xhtml2pdf',
     'corsheaders',
     'rest_framework',
+    'django_select2',
 
     # apps
     'profiles',

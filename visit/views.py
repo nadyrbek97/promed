@@ -1,7 +1,9 @@
-from datetime import datetime
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
@@ -10,9 +12,59 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from profiles.models import Doctor, User, Patient
-from visit.models import Visit, Review
+from visit.models import Visit, Review, VisitImage
 from profiles.views import med_center, patient_main_page
-from visit.forms import ReviewForm, AppointmentForm
+from visit.forms import (ReviewForm, AppointmentForm,
+                         ConclusionForm)
+from visit.utils import render_to_pdf
+
+
+def create_conclusion(request):
+    if request.method == "POST":
+        form = ConclusionForm(data=request.POST)
+        files = request.FILES.getlist('image')
+        url_list = []
+        if form.is_valid():
+            print("is valid")
+            print(files)
+            # get doctor from request.user
+            user = request.user
+            # get image from request
+
+            doctor_name_surname = User.objects.get(id=user.id).full_name
+            # get data from form
+            patient_name_surname = form.cleaned_data["user_name_surname"].full_name
+            patient_username = form.cleaned_data["user_name_surname"].username
+            patient_password = form.cleaned_data["user_name_surname"].patient.first_password
+            text = form.cleaned_data["text"]
+            # ---------create visit in db ------
+            visit = Visit.objects.create(
+                start_time=datetime.date.today(),
+                is_finished=True,
+                doctor=Doctor.objects.get(profile_id=user.id),
+                patient=Patient.objects.get(profile_id=form.cleaned_data["user_name_surname"].id),
+                text=text.replace('\n', '\n')
+            )
+            for image in files:
+                visit_image = VisitImage.objects.create(
+                    visit_id=visit,
+                    image=image
+                )
+                url_list.append(visit_image.image.url)
+            # ---------pass data for pdf ------
+            data = {
+                'med_center': med_center.title,
+                'doctor_name': doctor_name_surname,
+                'patient_name': patient_name_surname,
+                'patient_username': patient_username,
+                'patient_password': patient_password,
+                'text': text.split("\n"),
+                'images': url_list,
+                'today': datetime.date.today(),
+            }
+            pdf = render_to_pdf('pdf/conclusion.html', data)
+            return HttpResponse(pdf, content_type='application/pdf')
+        print(form.errors)
 
 
 def create_review(request):
@@ -77,7 +129,7 @@ def user_visit_list(request):
         visits = Visit.objects.filter(doctor__profile_id=user_id)
     elif user.role == 1:
         visits = Visit.objects.filter(patient__profile_id=user_id).order_by('-start_time')
-    paginator = Paginator(visits, 5)
+    paginator = Paginator(visits, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -102,8 +154,8 @@ def filter_by_date(request):
             date_from = request.GET.get('date-from') + " 00:00:00"
             date_to = request.GET.get('date-to') + " 00:00:00"
 
-            d_from = datetime.strptime(date_from, "%d/%m/%Y %H:%M:%S")
-            d_to = datetime.strptime(date_to, "%d/%m/%Y %H:%M:%S")
+            d_from = datetime.datetime.strptime(date_from, "%d/%m/%Y %H:%M:%S")
+            d_to = datetime.datetime.strptime(date_to, "%d/%m/%Y %H:%M:%S")
 
             print(date_to)
             print(date_from)

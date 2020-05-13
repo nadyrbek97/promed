@@ -89,8 +89,8 @@ class MyUserAdmin(UserAdmin):
             'fields': ('username', 'role', 'password1', 'password2')}
         ),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('full_name', 'username')
+    ordering = ('-created',)
     filter_horizontal = ()
 
 
@@ -100,5 +100,20 @@ admin.site.register(User, MyUserAdmin)
 # unregister the Group model from admin.
 admin.site.unregister(Group)
 admin.site.register(Doctor)
-admin.site.register(Patient)
+
+
+class PatientAdmin(admin.ModelAdmin):
+    ordering = ('-profile_id__created', )
+    list_display = ('full_name', 'username')
+    search_fields = ('profile_id__full_name', )
+    list_per_page = 10
+
+    def full_name(self, obj):
+        return obj.profile_id.full_name
+
+    def username(self, obj):
+        return obj.profile_id.username
+
+
+admin.site.register(Patient, PatientAdmin)
 
