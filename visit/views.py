@@ -42,6 +42,8 @@ def create_conclusion(request):
             doctor_name_surname = User.objects.get(id=user.id).full_name
             # get data from form
             patient_name_surname = form.cleaned_data["user_name_surname"].full_name
+            patient_username = form.cleaned_data["user_name_surname"].username
+            patient_password = form.cleaned_data["user_name_surname"].patient.first_password
             text = form.cleaned_data["text"]
 
             # ---------pass data for pfd ------
@@ -49,6 +51,8 @@ def create_conclusion(request):
                 'med_center': med_center.title,
                 'doctor_name': doctor_name_surname,
                 'patient_name': patient_name_surname,
+                'patient_username': patient_username,
+                'patient_password': patient_password,
                 'text': text.split("\n"),
                 'images': url_list,
                 'today': datetime.date.today(),
