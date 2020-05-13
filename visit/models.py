@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -9,17 +11,20 @@ from services.models import Service
 class Visit(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     start_time = models.DateTimeField(verbose_name=_("Start date"))
-    is_finished = models.BooleanField(verbose_name=_("finished"), default=False)
+    is_finished = models.BooleanField(verbose_name=_("Finished"), default=False)
 
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE,
-                               related_name="visits")
-    service = models.ManyToManyField(Service, verbose_name=_("Doctor"),
+                               verbose_name=_("Doctor"), related_name="visits")
+    service = models.ManyToManyField(Service, verbose_name=_("Service"),
                                      blank=True,
                                      related_name="visits")
     patient = models.ForeignKey(Patient, verbose_name=_("Patient"),
                                 on_delete=models.CASCADE,
                                 related_name="visits")
-    preference = models.TextField(verbose_name=_("Preference"), null=True, blank=True)
+    preference = models.TextField(verbose_name=_("Preference"),
+                                  null=True, blank=True)
+    text = models.TextField(verbose_name=_("Conclusion Text"),
+                            null=True, blank=True)
 
     class Meta:
         ordering = ['created']
@@ -34,7 +39,8 @@ class Visit(models.Model):
 
 class VisitImage(models.Model):
     visit_id = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='visit_images/')
+    image = models.ImageField(
+        upload_to='visits/' + datetime.datetime.now().strftime("%Y/%m/%d"))
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

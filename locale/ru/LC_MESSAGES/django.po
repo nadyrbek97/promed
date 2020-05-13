@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 18:45+0000\n"
+"POT-Creation-Date: 2020-05-13 19:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,7 @@ msgstr "Фотографии Мед.Центра"
 msgid "profiles"
 msgstr "профайлы"
 
-#: profiles/models.py:44 visit/models.py:16 visit/models.py:49
+#: profiles/models.py:44 visit/models.py:17 visit/models.py:57
 msgid "Doctor"
 msgstr "Доктор"
 
@@ -90,7 +90,7 @@ msgstr "Аддесс"
 msgid "Initial Password"
 msgstr "Начальный пароль"
 
-#: profiles/models.py:66 visit/models.py:19 visit/models.py:46
+#: profiles/models.py:66 visit/models.py:21 visit/models.py:54
 msgid "Patient"
 msgstr "Пациент"
 
@@ -102,7 +102,7 @@ msgstr "Пациенты"
 msgid "Sample"
 msgstr "Шаблон"
 
-#: services/models.py:16
+#: services/models.py:16 visit/models.py:18
 msgid "Service"
 msgstr "Услуга"
 
@@ -602,7 +602,7 @@ msgstr ""
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2032
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2032
 #: venv/lib64/python3.7/site-packages/django/db/models/fields/__init__.py:2028
-#: visit/models.py:53
+#: visit/models.py:61
 msgid "Text"
 msgstr "Текст"
 
@@ -1805,39 +1805,43 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: visit/models.py:11
+#: visit/models.py:13
 msgid "Start date"
-msgstr ""
+msgstr "Дата начала"
 
-#: visit/models.py:12
-msgid "finished"
-msgstr ""
+#: visit/models.py:14
+msgid "Finished"
+msgstr "Окончен"
 
-#: visit/models.py:22
+#: visit/models.py:24
 msgid "Preference"
-msgstr ""
+msgstr "Предпочтения"
 
 #: visit/models.py:26
+msgid "Conclusion Text"
+msgstr "Текст заключения"
+
+#: visit/models.py:31
 msgid "Visit"
 msgstr "Посещение"
 
-#: visit/models.py:27
+#: visit/models.py:32
 msgid "Visits"
 msgstr "Посещения"
 
-#: visit/models.py:45
+#: visit/models.py:53
 msgid "is_approved"
 msgstr "подтвержен"
 
-#: visit/models.py:54
+#: visit/models.py:62
 msgid "created"
 msgstr "дата создания"
 
-#: visit/models.py:58
+#: visit/models.py:66
 msgid "Review"
 msgstr "Отзыв"
 
-#: visit/models.py:59
+#: visit/models.py:67
 msgid "Reviews"
 msgstr "Отзывы"
 
