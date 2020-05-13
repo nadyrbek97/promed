@@ -154,8 +154,8 @@ def filter_by_date(request):
             date_from = request.GET.get('date-from') + " 00:00:00"
             date_to = request.GET.get('date-to') + " 00:00:00"
 
-            d_from = datetime.strptime(date_from, "%d/%m/%Y %H:%M:%S")
-            d_to = datetime.strptime(date_to, "%d/%m/%Y %H:%M:%S")
+            d_from = datetime.datetime.strptime(date_from, "%d/%m/%Y %H:%M:%S")
+            d_to = datetime.datetime.strptime(date_to, "%d/%m/%Y %H:%M:%S")
 
             print(date_to)
             print(date_from)
