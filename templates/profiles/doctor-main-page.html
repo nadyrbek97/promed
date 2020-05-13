@@ -149,7 +149,7 @@
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <br>
-            <div class="container-fluid">
+            <div class="container-fluid" style="z-index: 99">
                 {% if messages %}
                     {% for message in messages %}
                         <div id="message-alert" data-dismiss="alert" class="alert alert-dismissible alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 14:09+0000\n"
+"POT-Creation-Date: 2020-05-13 18:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,11 +76,25 @@ msgstr "Доктор"
 msgid "Doctors"
 msgstr "Доктора"
 
-#: profiles/models.py:61 visit/models.py:19 visit/models.py:46
+#: profiles/models.py:59
+#, fuzzy
+#| msgid "profiles"
+msgid "Profile"
+msgstr "Профайл"
+
+#: profiles/models.py:61
+msgid "Address"
+msgstr "Аддесс"
+
+#: profiles/models.py:63
+msgid "Initial Password"
+msgstr "Начальный пароль"
+
+#: profiles/models.py:66 visit/models.py:19 visit/models.py:46
 msgid "Patient"
 msgstr "Пациент"
 
-#: profiles/models.py:62
+#: profiles/models.py:67
 msgid "Patients"
 msgstr "Пациенты"
 
@@ -1829,8 +1843,3 @@ msgstr "Отзывы"
 
 #~ msgid "Departament"
 #~ msgstr "Отделение"
-
-#, fuzzy
-#~| msgid "profiles"
-#~ msgid "Profile"
-#~ msgstr "профайл"

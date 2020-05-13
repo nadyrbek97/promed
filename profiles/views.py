@@ -86,7 +86,8 @@ def create_patient(request):
                 )
                 patient = Patient(
                     profile_id=created_user,
-                    address=form.cleaned_data['address']
+                    address=form.cleaned_data['address'],
+                    first_password=password
                 )
                 patient.save()
                 # -------- Phone Number -----------
