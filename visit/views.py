@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from profiles.models import Doctor, User, Patient
-from visit.models import Visit, Review
+from visit.models import Visit, Review, VisitImage
 from profiles.views import med_center, patient_main_page
 from visit.forms import (ReviewForm, AppointmentForm,
                          ConclusionForm)
@@ -30,14 +30,6 @@ def create_conclusion(request):
             # get doctor from request.user
             user = request.user
             # get image from request
-            for image in files:
-                print(image.name)
-                print(image.size)
-                fs = FileSystemStorage()
-                image_name = fs.save(image.name, image)
-                url_list.append(fs.url(image_name))
-                print(url_list)
-                # ---save image finished----
 
             doctor_name_surname = User.objects.get(id=user.id).full_name
             # get data from form
@@ -45,8 +37,21 @@ def create_conclusion(request):
             patient_username = form.cleaned_data["user_name_surname"].username
             patient_password = form.cleaned_data["user_name_surname"].patient.first_password
             text = form.cleaned_data["text"]
-
-            # ---------pass data for pfd ------
+            # ---------create visit in db ------
+            visit = Visit.objects.create(
+                start_time=datetime.date.today(),
+                is_finished=True,
+                doctor=Doctor.objects.get(profile_id=user.id),
+                patient=Patient.objects.get(profile_id=form.cleaned_data["user_name_surname"].id),
+                text=text.replace('\n', '\n')
+            )
+            for image in files:
+                visit_image = VisitImage.objects.create(
+                    visit_id=visit,
+                    image=image
+                )
+                url_list.append(visit_image.image.url)
+            # ---------pass data for pdf ------
             data = {
                 'med_center': med_center.title,
                 'doctor_name': doctor_name_surname,
