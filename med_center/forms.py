@@ -24,10 +24,8 @@ class AppointmentForm(forms.Form):
             }
         )
     )
-    default_doctor = Doctor.objects.first()
     doctor_choice = forms.ModelChoiceField(
         required=False,
-        initial=default_doctor,
         queryset=Doctor.objects.filter(profile_id__is_superuser=False),
         label="Выберите Доктора",
         widget=forms.Select(
