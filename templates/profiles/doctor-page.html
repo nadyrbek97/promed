@@ -22,6 +22,8 @@
                                 <div class="text-center">
                                     {% if doctor.image %}
                                         <img src="{{ doctor.image.url }}" alt="User Avatar" class="rounded-circle user-avatar-xxl">
+                                    {% elif med_center.doctor_default_image %}
+                                        <img src="{{ med_center.doctor_default_image.url }}" alt="User Avatar" class="rounded-circle user-avatar-xxl">
                                     {% else %}
                                         <img src="/media/doctors/doc_default.png" alt="User Avatar" class="rounded-circle user-avatar-xxl">
                                     {% endif %}
