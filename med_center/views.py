@@ -16,7 +16,7 @@ from services.models import Service
 from visit.models import Review
 
 # med center
-med_center = MedicalCenter.objects.first()
+med_center = MedicalCenter.objects.all()[:1].get()
 logo = med_center.photos.filter(is_logo=True).first()
 schedule_times = med_center.schedule_times.all()
 # branch
