@@ -90,7 +90,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 mb-4">
-          <a href="#" class="mr-auto"><img src="{{ logo.image.url }}" width="200" height="80" class="hires" alt="Free Template by uiCookies"></a>
+          <a href="{% url 'main-page' %}" class="mr-auto"><img src="{{ logo.image.url }}" width="200" height="80" class="hires" alt="Free Template by uiCookies"></a>
         </div>
         <div class="col-md-9">
           <div class="float-md-right float-none">
@@ -270,9 +270,11 @@
             {% for doctor in doctors %}
               <div class="col-lg-3 col-md-3 col-sm-6 col-6 prbootstrap-team">
                 {% if doctor.image %}
-                <img src="{{ doctor.image.url }}" alt="Free Template by uicookies.com" class="img-fluid">
+                <img src="{{ doctor.image.url }}" alt="doctor.image" class="img-fluid">
+                {% elif med_center.doctor_default_image %}
+                <img src="{{ med_center.doctor_default_image.url }}" alt="doctor.image" class="img-fluid">
                 {% else %}
-                <img src="/media/doctors/doc_default.png" alt="Free Template by uicookies.com" class="img-fluid">
+                <img src="/media/doctors/doc_default.png" alt="doctor.image" class="img-fluid">
                 {% endif %}
                   <div class="probootstrap-person-text">
                   <span class="title">{{ doctor.department_id.title }}</span>
@@ -400,9 +402,23 @@
         <div class="col-md-4">
           <h3 class="heading">Подписывайтесь на наши соц. сети </h3>
           <ul class="probootstrap-footer-social">
+            {% if med_center.insta_link %}
+              <li><a href="{{ med_center.insta_link }}"><span class="icon-instagram"></span></a></li>
+            {% else %}
             <li><a href="https://www.instagram.com/uzi_dr.sultanov/"><span class="icon-instagram"></span></a></li>
-            <li><a href="#"><span class="icon-facebook"></span></a></li>
-            <li><a href="#"><span class="icon-youtube"></span></a></li>
+            {% endif %}
+
+              {% if med_center.facebook_link %}
+              <li><a href="{{ med_center.facebook_link }}"><span class="icon-facebook"></span></a></li>
+            {% else %}
+              <li><a href="#"><span class="icon-facebook"></span></a></li>
+            {% endif %}
+
+            {% if med_center.youtube_link %}
+              <li><a href="{{ med_center.youtube_link }}"><span class="icon-youtube"></span></a></li>
+            {% else %}
+              <li><a href="#"><span class="icon-youtube"></span></a></li>
+            {% endif %}
           </ul>
         </div>
       </div>

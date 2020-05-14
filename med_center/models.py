@@ -5,6 +5,13 @@ from django.utils.translation import gettext_lazy as _
 class MedicalCenter(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    doctor_default_image = models.ImageField(upload_to="med-center-photos/",
+                                             null=True, blank=True)
+    patient_default_image = models.ImageField(upload_to="med-center-photos/",
+                                              null=True, blank=True)
+    insta_link = models.CharField(max_length=800, blank=True, null=True)
+    facebook_link = models.CharField(max_length=800, blank=True, null=True)
+    youtube_link = models.CharField(max_length=800, blank=True, null=True)
 
     class Meta:
         verbose_name = _("Medical Center")
