@@ -10,18 +10,9 @@ from med_center.forms import AppointmentForm
 
 from branch.models import Branch, BranchPhoneNumber
 from profiles.models import Doctor, User
-from profiles.views import med_center
 from department.models import Department
 from services.models import Service
 from visit.models import Review
-
-# med center
-med_center = MedicalCenter.objects.all()[:1].get()
-logo = med_center.photos.filter(is_logo=True).first()
-schedule_times = med_center.schedule_times.all()
-# branch
-main_branch = Branch.objects.get(med_center_id=med_center.id)
-main_branch_number = main_branch.numbers.first()
 
 
 def appointment_form(request):
@@ -52,6 +43,13 @@ def appointment_form(request):
 
 
 def about_page(request):
+    # med center
+    med_center = MedicalCenter.objects.all()[:1].get()
+    logo = med_center.photos.filter(is_logo=True).first()
+    schedule_times = med_center.schedule_times.all()
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
 
     context = {
         "med_center": med_center,
@@ -65,6 +63,13 @@ def about_page(request):
 
 
 def departments_page(request):
+    # med center
+    med_center = MedicalCenter.objects.all()[:1].get()
+    logo = med_center.photos.filter(is_logo=True).first()
+    schedule_times = med_center.schedule_times.all()
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
 
     departments = Department.objects.all()
 
@@ -81,6 +86,14 @@ def departments_page(request):
 
 
 def contacts_page(request):
+    # med center
+    med_center = MedicalCenter.objects.all()[:1].get()
+    logo = med_center.photos.filter(is_logo=True).first()
+    schedule_times = med_center.schedule_times.all()
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
+
     doctors = Doctor.objects.filter(profile_id__is_superuser=False)
     context = {
         "med_center": med_center,
@@ -95,6 +108,14 @@ def contacts_page(request):
 
 
 def main_page_view(request):
+    # med center
+    med_center = MedicalCenter.objects.all()[:1].get()
+    logo = med_center.photos.filter(is_logo=True).first()
+    schedule_times = med_center.schedule_times.all()
+    # branch
+    main_branch = Branch.objects.get(med_center_id=med_center.id)
+    main_branch_number = main_branch.numbers.first()
+
     # user info
     user_role = None
     if request.user.is_authenticated:

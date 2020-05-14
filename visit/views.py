@@ -13,13 +13,17 @@ from django.utils.html import strip_tags
 
 from profiles.models import Doctor, User, Patient
 from visit.models import Visit, Review, VisitImage
-from profiles.views import med_center, patient_main_page
+from med_center.models import MedicalCenter
+from profiles.views import patient_main_page
 from visit.forms import (ReviewForm, AppointmentForm,
                          ConclusionForm)
 from visit.utils import render_to_pdf
 
 
 def create_conclusion(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     if request.method == "POST":
         form = ConclusionForm(data=request.POST)
         files = request.FILES.getlist('image')
@@ -120,6 +124,9 @@ def create_appointment(request):
 
 @login_required(login_url="/profiles/login/")
 def user_visit_list(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     # Get doctor first
     user_id = request.user.id
     user = User.objects.get(id=user_id)
@@ -144,6 +151,9 @@ def user_visit_list(request):
 
 @login_required(login_url="/profiles/login/")
 def filter_by_date(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     # Get doctor first
     visits = []
     doctor_user_id = request.user.doctor
