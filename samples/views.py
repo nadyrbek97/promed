@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 
 from profiles.models import Doctor
-from profiles.views import med_center
+from med_center.models import MedicalCenter
 
 from samples.models import Sample
 from samples.forms import SampleForm
@@ -12,6 +12,9 @@ from samples.forms import SampleForm
 
 @login_required(login_url="/profiles/login/")
 def sample_list(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     form = SampleForm()
 
     # Get doctor first

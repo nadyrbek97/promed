@@ -22,11 +22,10 @@ from visit.forms import (ReviewForm, AppointmentForm,
 
 from samples.models import Sample
 
-# Medical Center
-med_center = MedicalCenter.objects.all()[:1].get()
-
 
 def login(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
 
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
@@ -107,6 +106,9 @@ def create_patient(request):
 
 @login_required(login_url="/profiles/login/")
 def profile_main_view(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     user = request.user
 
     form = ConclusionForm()
@@ -131,6 +133,9 @@ def profile_main_view(request):
 
 @login_required(login_url="/profiles/login/")
 def patient_list(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     # Get doctor first
     doctor = request.user.doctor
 
@@ -155,6 +160,9 @@ def patient_list(request):
 
 @login_required(login_url="/profiles/login/")
 def find_patient_by_full_name(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     full_name = request.GET.get('full-name')
     patients_list = Patient.objects.filter(profile_id__full_name__icontains=full_name)
     paginator = Paginator(patients_list, 5)
@@ -188,6 +196,9 @@ def patient_autocomplete_search(request):
 
 # Doctor Profile Actions
 def doctor_detail_page(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     # forms
     phone_form = UserAddPhoneNumberForm()
     profile_update_form = DoctorProfileUpdateForm()
@@ -280,6 +291,9 @@ def profile_phone_number_delete(request, phone_id):
 # Patient views
 @login_required(login_url="/profiles/login/")
 def patient_main_page(request):
+    # Medical Center
+    med_center = MedicalCenter.objects.all()[:1].get()
+
     phone_form = UserAddPhoneNumberForm()
     profile_update_form = PatientProfileUpdateForm()
     appointment_form = AppointmentForm()
