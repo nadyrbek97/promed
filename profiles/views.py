@@ -23,7 +23,7 @@ from visit.forms import (ReviewForm, AppointmentForm,
 from samples.models import Sample
 
 # Medical Center
-med_center = MedicalCenter.objects.first()
+med_center = MedicalCenter.objects.all()[:1].get()
 
 
 def login(request):
