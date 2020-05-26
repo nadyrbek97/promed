@@ -6,9 +6,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from api.serializers import ServiceSerializer
+from api.serializers import DepartmentSerializer
 
 from profiles.models import User
 from services.models import Service
+from department.models import Department
 
 
 class GetServicesByDepartmentId(APIView):
@@ -21,6 +23,23 @@ class GetServicesByDepartmentId(APIView):
         services = Service.objects.filter(department_id=department_id)
         serialized_services = ServiceSerializer(services, many=True)
         result['services'] = serialized_services.data
+        return Response(data=result)
+
+
+class GetDepartmentById(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        result = {}
+        department_id = kwargs.get('department_id')
+        try:
+            department = Department.objects.get(id=department_id)
+        except Department.DoesNotExist:
+            result['error'] = 'Department Does Not Exist'
+            return Response(data=result)
+        serialized_department = DepartmentSerializer(department)
+        result['department'] = serialized_department.data
         return Response(data=result)
 
 

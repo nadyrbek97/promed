@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class MedicalCenter(models.Model):
     title = models.CharField(max_length=200)
+    tagline = models.CharField(max_length=500, null=True, blank=True)
     description = models.TextField()
     doctor_default_image = models.ImageField(upload_to="med-center-photos/",
                                              null=True, blank=True)
