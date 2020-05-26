@@ -73,13 +73,16 @@ def departments_page(request):
 
     departments = Department.objects.all()
 
+    dep = Department.objects.first()
+
     context = {
         "med_center": med_center,
         "main_branch": main_branch,
         "main_branch_number": main_branch_number.number,
         "schedules": schedule_times,
         "logo": logo,
-        "departments": departments
+        "departments": departments,
+        "dep": dep
     }
 
     return render(request, 'med_center/departments.html', context=context)
