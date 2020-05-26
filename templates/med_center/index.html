@@ -73,6 +73,49 @@
                 <li class="nav-item active"><a href="{% url 'login-view' %}" class="nav-link pl-0">Войти</a></li>
             </ul>
           {% endif %}
+
+          {% if user.is_authenticated %}
+            <ul class="navbar-nav">
+                <li class="nav-item">
+{#                    <a type="button" class="nav-link pl-0" data-toggle="modal" data-target="#logoutModal">#}
+{#                      Выйти#}
+{#                    </a>#}
+                    <form method="post" action="{% url 'logout-view' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" style="background: inherit; color: whitesmoke;">Выйти</button>
+                    </form>
+                </li>
+            </ul>
+
+          {% else %}
+
+          {% endif %}
+
+        <!-- Logout Modal -->
+{#        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="recordDeleteModalLabel" aria-hidden="true">#}
+{#            <div class="modal-dialog" role="document">#}
+{#                <div class="modal-content">#}
+{#                    <div class="modal-header">#}
+{#                        <h5 class="modal-title" id="recordDeleteModalLabel">Выход</h5>#}
+{#                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                            <span aria-hidden="true">&times;</span>#}
+{#                        </button>#}
+{#                    </div>#}
+{#                    <div class="modal-body">#}
+{#                        Вы действительно хотите выйти ?#}
+{#                    </div>#}
+{#                    <div class="modal-footer">#}
+{#                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>#}
+{#                        <form method="post" action="{% url 'logout-view' %}">#}
+{#                            {% csrf_token %}#}
+{#                            <button type="submit" class="btn btn-primary">Да</button>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+        <!-- Modal end -->
+
 {#          <form action="#" method="get" class="probootstrap-search-form mb-sm-0 mb-3">#}
 {#            <div class="form-group">#}
 {#              <button class="icon submit"><span class="icon-magnifying-glass"></span></button>#}
