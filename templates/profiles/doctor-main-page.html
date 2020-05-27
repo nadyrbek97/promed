@@ -208,12 +208,10 @@
                                 <form action="{% url 'create-patient-view' %}" method="POST">
                                         {% csrf_token %}
                                       <div class="form-group">
-{#                                        <label for="patient-full-name-input" class="col-form-label">Ф.И.О</label>#}
                                           {{ create_patient_form.full_name.label }}
                                           {{ create_patient_form.full_name }}
                                       </div>
                                     <div class="form-group">
-{#                                        <label for="add-doctor-number-input" class="col-form-label">Номер Телефона</label>#}
                                           {{ create_patient_form.phone_number.label }}
                                           {{ create_patient_form.phone_number }}
                                     </div>
@@ -221,7 +219,6 @@
                                         $('#patient-phone-number-input').inputmask("0999-999-999")
                                     </script>
                                     <div class="form-group">
-{#                                            <label for="doctor-review-choice" class="col-form-label">Дата рождения</label>#}
                                             {{ create_patient_form.birth_date.label }}
                                             {{ create_patient_form.birth_date }}
                                     </div>
@@ -259,7 +256,6 @@
                     <form class="was-validated" action="{% url 'create-conclusion-view' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-{#                            <label for="inputText3" class="col-form-label">Ф.И.О пациента</label>#}
                             <style>
                                 .django-select2 {
                                     width: 100%;
@@ -267,8 +263,6 @@
                             </style>
                             {{ form.user_name_surname.label }}
                             {{ form.user_name_surname }}
-
-{#                            <input id="inputText3" type="text" class="form-control" required>#}
                             <div class="valid-feedback">Добавлено</div>
                             <div class="invalid-feedback">Обязательно введите Ф.И.О пациента</div>
                         </div>
@@ -276,10 +270,8 @@
                         <div class="form-group">
                             {{ form.text.label }}
                             {{ form.text }}
-{#                            <textarea id="conclusionPDF" class="form-control" id="exampleFormControlTextarea1" rows="20" required></textarea>#}
                         </div>
                         <div class="custom-file">
-{#                            <input type="file" class="custom-file-input" id="customFile" required>#}
                             {{ form.image }}
                             <button id="printButton" type="submit" class="btn btn-info form-group mt-2 mb-2" data-toggle="tooltip"
                                     data-placement="top" title="Tooltip on top">
@@ -310,20 +302,6 @@
                                       });
 
                                     });
-                                {#$(document).on('ready',()=>{#}
-                                {#    $("#images-input").on('change',function(){#}
-                                {#        console.log('Image uploaded')#}
-                                {#                $(".gallery").empty();//you can remove this code if you want previous user input#}
-                                {#                for(let i=0;i<this.files.length;++i){#}
-                                {#                    let filereader = new FileReader();#}
-                                {#                    let $img=jQuery.parseHTML("<img src=''>");#}
-                                {#                    filereader.onload = function(){#}
-                                {#                        $img[0].src=this.result;#}
-                                {#                    };#}
-                                {#                    filereader.readAsDataURL(this.files[i]);#}
-                                {#                    $(".gallery").append($img);#}
-                                {#                }#}
-                                {#    });#}
 
                             </script>
                         </div>
@@ -336,29 +314,6 @@
             <!-- ============================================================== -->
             <!-- end content  -->
             <!-- ============================================================== -->
-{#            <!-- ============================================================== -->#}
-{#            <!-- footer -->#}
-{#            <!-- ============================================================== -->#}
-{#            <div class="footer">#}
-{#                <div class="container-fluid">#}
-{#                    <div class="row">#}
-{#                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">#}
-{#                             Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.#}
-{#                        </div>#}
-{#                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">#}
-{#                            <div class="text-md-right footer-links d-none d-sm-block">#}
-{#                                <a href="javascript: void(0);">About</a>#}
-{#                                <a href="javascript: void(0);">Support</a>#}
-{#                                <a href="javascript: void(0);">Contact Us</a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            <!-- ============================================================== -->#}
-{#            <!-- end footer -->#}
-{#            <!-- ============================================================== -->#}
-
         </div>
 
         <!-- ============================================================== -->
@@ -373,10 +328,6 @@
     <!-- morris-chart js -->
     <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
     <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
-{#    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>#}
-{#    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>#}
-{#    <script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>#}
-
 </body>
 
 </html>
