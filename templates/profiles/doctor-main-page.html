@@ -324,7 +324,13 @@
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
-    {{ form.media.render }}
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" type="text/css" media="screen" rel="stylesheet">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/i18n/ru.js"></script>
+    <script
+      src="{% static 'django_select2/django_select2.js' %}">
+    </script>
+{#    {{ form.media.render }}#}
     <!-- morris-chart js -->
     <script src="{% static '/profile/vendor/charts/morris-bundle/morris.js' %}"></script>
     <script src="{% static '/profile/vendor/charts/morris-bundle/raphael.min.js' %}"></script>
