@@ -6,6 +6,7 @@ class MedicalCenter(models.Model):
     title = models.CharField(max_length=200)
     tagline = models.CharField(max_length=500, null=True, blank=True)
     description = models.TextField()
+    email = models.EmailField(null=True, blank=True)
     doctor_default_image = models.ImageField(upload_to="med-center-photos/",
                                              null=True, blank=True)
     patient_default_image = models.ImageField(upload_to="med-center-photos/",
