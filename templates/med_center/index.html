@@ -61,19 +61,19 @@
             {% endwith %}
         </ul>
           {% if user.is_authenticated %}
-              {% if user_role == 0 %}
-                <ul class="navbar-nav">
-                    <li class="nav-item active"><a href="{% url 'profile-main-view' %}" class="nav-link pl-0">Мой профиль</a></li>
-                </ul>
+              {% if user.role == 0 %}
+                   <ul class="navbar-nav">
+                        <li class="nav-item active"><a href="{% url 'profile-main-view' %}" class="nav-link pl-0">Мой профиль</a></li>
+                   </ul>
               {% else %}
-               <ul class="navbar-nav">
-                    <li class="nav-item active"><a href="{% url 'patient-main-page' %}" class="nav-link pl-0">Мой профиль</a></li>
-               </ul>
+                   <ul class="navbar-nav">
+                        <li class="nav-item active"><a href="{% url 'patient-main-page' %}" class="nav-link pl-0">Мой профиль</a></li>
+                   </ul>
               {% endif %}
           {% else %}
               <ul class="navbar-nav">
-                <li class="nav-item active"><a href="{% url 'login-view' %}" class="nav-link pl-0">Войти</a></li>
-            </ul>
+                   <li class="nav-item active"><a href="{% url 'login-view' %}" class="nav-link pl-0">Войти</a></li>
+              </ul>
           {% endif %}
 
           {% if user.is_authenticated %}
